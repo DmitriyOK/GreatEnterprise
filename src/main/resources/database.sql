@@ -35,75 +35,18 @@ CREATE TABLE employerWorkDay (
 )
   ENGINE = InnoDB;
 
-INSERT INTO department (departmentName) VALUES ('Back-End');
-INSERT INTO department (departmentName) VALUES ('Front-End' );
-INSERT INTO department (departmentName) VALUES ('QA');
-INSERT INTO department (departmentName) VALUES ('HR');
-INSERT INTO department (departmentName) VALUES ('Bookkeeping');
+SET GLOBAL event_scheduler = ON;
 
-INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('oborisov', 'test', 'Oleg', 'Borisov',1);
-INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('apetrova', 'test', 'Anna', 'Petrova',1);
-INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('vpopov', 'test', 'Viktor', 'Popov',1);
-INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('slisanov', 'test', 'Sergey', 'Lisanov',2);
-INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('ovikhina', 'test', 'Olga', 'Vikhina',2);
-INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('amororozov', 'test', 'Andrey', 'Morozov',2);
-INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('skrupina', 'test', 'Svetlana', 'Krupina',3);
-INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('mmorozova', 'test', 'Marina', 'Morozova',3);
-INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('vorlov', 'test', 'Vladimir', 'Orlov',4);
-INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('zivanova', 'test', 'Zoya', 'Ivanova',5);
+DELIMITER $$
 
-DROP PROCEDURE IF EXISTS loadTestData;
+CREATE
+EVENT `startEmployerWorkDay`
+  ON SCHEDULE EVERY 1 DAY STARTS '2017-03-16 03:00:00'
+DO BEGIN
+  INSERT INTO employerworkday(employerId)
+    SELECT employer.id
+    FROM employer;
 
-DELIMITER #
-CREATE PROCEDURE loadTestData()
-  BEGIN
-
-    DECLARE v_max INT UNSIGNED DEFAULT 11;
-    DECLARE v_counter INT UNSIGNED DEFAULT 1;
-
-    TRUNCATE TABLE employerWorkDay;
-    START TRANSACTION;
-    WHILE v_counter < v_max DO
-      INSERT INTO employerWorkDay (employerId, startTime, unixStartTime)
-      VALUES (v_counter, now(), UNIX_TIMESTAMP());
-      SET v_counter = v_counter + 1;
-    END WHILE;
-    COMMIT;
-  END #
+END $$
 
 DELIMITER ;
-
-CALL loadTestData();
-
-SELECT * FROM employerWorkDay;
-#
-# SELECT * FROM employer;
-# SELECT * FROM department;
-#
-# #Select all columns from all tables
-# SELECT
-#   department.id, departmentName,
-#   employer.id, login, password, firstName, lastName, departmentId,
-#   employerWorkDay.id, employerId, startTime, finishTime, unixStartTime, unixFinishTime
-# FROM employerWorkDay
-#   JOIN department ON employerWorkDay.departmentId = department.id
-#   JOIN employer ON employerWorkDay.employerId = employer.id;
-#
-# UPDATE employerWorkDay
-# SET finishTime = now(), unixFinishTime = UNIX_TIMESTAMP()
-# WHERE employerWorkDay.id = 1;
-#
-# #Select count employers by department
-# SELECT
-#   departmentName,COUNT(*) AS 'Employers'
-# FROM employerWorkDay
-#   JOIN employer ON employerWorkDay.employerId = employer.id
-#   JOIN department ON employerWorkDay.departmentId = department.id
-# GROUP BY departmentName;
-#
-# #Select employers for daily reports
-# SELECT
-#   firstName, lastName, startTime, finishTime, departmentName
-# FROM employerworkday
-#   JOIN department ON employerWorkDay.departmentId = department.id
-#   JOIN employer ON employerWorkDay.employerId = employer.id;

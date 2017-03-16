@@ -14,7 +14,8 @@ import java.util.List;
  */
 public interface EmployerWorkDayService {
 
-    List<EmployerWorkDay> findEmployerWorkDayByPeriod(@Nullable Employer employer, int startPeriod, int endPeriod);
+    List<EmployerWorkDay> findEmployerWorkDayByPeriod(Employer employer, int startPeriod, int endPeriod);
     List<EmployerWorkDay> findAll();
+    EmployerWorkDay findByLogin();
     EmployerWorkDay save(EmployerWorkDay employerWorkDay);
 }

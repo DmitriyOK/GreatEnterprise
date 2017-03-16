@@ -15,6 +15,7 @@ import java.sql.*;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -46,17 +47,91 @@ public class EntityDb {
 //        EntityDb.saveEntity(newDay);
 //
 //        System.out.println(newDay);
-        ResultSet rs = EntityDb.findEntity(Employer.class,null);
-        List<Object> allByResultSet = EntityDb.findAllByResultSet(Employer.class, rs);
-        System.out.println(allByResultSet);
+//        ResultSet rs = EntityDb.findEntity(Employer.class,null);
+//        List<Object> allByResultSet = EntityDb.findAllByResultSet(Employer.class, rs);
+//        System.out.println(allByResultSet);
+
+        EntityDb.findCurrentDayReport();
 
     }
 
-    public static Employer findEmployerById(Class<Employer> employerClass, String login) {
-    return null;
+    public static Employer findEmployerByLogin(Class<Employer> employerClass, String login) {
+
+        ResultSet resultSet;
+        Connection conn;
+        PreparedStatement preparedStatement;
+        String tableName = getTableName(Employer.class);
+        List<Object> resultList = null;
+        try {
+            conn = DBConnection.getConnection();
+            preparedStatement = conn.prepareStatement(SqlQuery.FIND_BY_LOGIN.toString().replace(":tableName", tableName));
+            preparedStatement.setString(1,login);
+             resultSet = preparedStatement.executeQuery();
+             resultList = findAllByResultSet(Employer.class, resultSet);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return (Employer) resultList.get(0);
     }
+
+
+
+
 
     /*ГОТОВЫЕ МЕТОДЫ*/
+
+    public static List<Object> findEmployerWorkDayHistoryByPeriod(Employer employer, int startPeriod, int endPeriod){
+
+        Connection conn;
+        PreparedStatement preparedStatement;
+        List<Object> result=null;
+
+        try{
+            conn=DBConnection.getConnection();
+            preparedStatement = conn.prepareStatement(SqlQuery.EMPLOYER_WORK_DAY_BY_PERIOD.toString());
+            preparedStatement.setInt(1, startPeriod);
+            preparedStatement.setInt(2, endPeriod);
+            preparedStatement.setInt(3, employer.getId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            result = findAllByResultSet(EmployerWorkDay.class, resultSet);
+        }
+        catch (Exception e){}
+
+        return result;
+    }
+
+    public static List<Object> findCurrentDayReport(){
+
+        int startDay;
+        long temp;
+
+        java.util.Date date = new java.util.Date();
+        temp = date.getTime()/1000;
+        temp = temp/86400;
+        startDay = (int) temp*86400;
+
+
+        Connection conn;
+        PreparedStatement preparedStatement;
+        List<Object> result=null;
+
+        try{
+            conn=DBConnection.getConnection();
+            preparedStatement = conn.prepareStatement(SqlQuery.CURRENT_DAY_REPORT.toString());
+            preparedStatement.setInt(1, startDay);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            result = findAllByResultSet(EmployerWorkDay.class, resultSet);
+        }
+        catch (Exception e){e.printStackTrace();}
+
+        for(Object obj : result){
+            System.out.println(obj);
+        }
+
+        return result;
+    }
 
     public static EmployerWorkDay saveEntity(EmployerWorkDay employerWorkDay) {
 
@@ -101,12 +176,18 @@ public class EntityDb {
         try {
             String tableName = getTableName(className);
             if(query == null) {
-                query = SqlQuery.ALL.toString().replace(":tableName", tableName);
+                query = SqlQuery.ALL.toString().replace("?", tableName);
+                conn = DBConnection.getConnection();
+                preparedStatement = conn.prepareStatement(query);
+                result=preparedStatement.executeQuery();
             }
-             conn = DBConnection.getConnection();
-             preparedStatement = conn.prepareStatement(query);
-             result=preparedStatement.executeQuery();
-        }catch (Exception e){
+            else {
+                conn = DBConnection.getConnection();
+                preparedStatement = conn.prepareStatement(query);
+                result=preparedStatement.executeQuery();
+            }
+
+        } catch (Exception e){
             e.printStackTrace();
         }
         return result;
@@ -147,6 +228,5 @@ public class EntityDb {
         }
         return tableName;
     }
-
 }
 

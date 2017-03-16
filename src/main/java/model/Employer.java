@@ -21,17 +21,9 @@ public class Employer {
     public Employer() {
     }
 
-    public int getId() {
-        return id;
-    }
-
     @Column(name = "id")
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
     }
 
     @Column(name = "login")
@@ -39,17 +31,9 @@ public class Employer {
         this.login = login;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     @Column(name = "password")
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
     }
 
     @Column(name = "firstName")
@@ -57,14 +41,28 @@ public class Employer {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
     @Column(name = "lastName")
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public int getId() {
+        return id;
+    }
+    public String getLogin() {
+        return login;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+
+
 
     @Override
     public String toString() {

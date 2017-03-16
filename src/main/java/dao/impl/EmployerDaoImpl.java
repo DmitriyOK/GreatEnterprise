@@ -10,6 +10,6 @@ import sqlquery.SqlQuery;
  */
 public class EmployerDaoImpl implements EmployerDao {
     public Employer findByLogin(String login) {
-        return EntityDb.findEmployerById(Employer.class, login);
+        return EntityDb.findEmployerByLogin(Employer.class, login);
     }
 }

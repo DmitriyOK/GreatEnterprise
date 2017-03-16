@@ -18,22 +18,20 @@ public class Department {
     public Department() {
     }
 
-    public int getId() {
-        return id;
-    }
-
     @Column(name = "id")
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getName() {
-        return departmentName;
-    }
-
     @Column(name = "departmentName")
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    public int getId() {
+        return id;
+    }
+    public String getName() {
+        return departmentName;
     }
 
     @Override

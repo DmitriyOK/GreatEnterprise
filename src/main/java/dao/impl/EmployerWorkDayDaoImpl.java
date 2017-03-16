@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import factory.EntityDb;
 
+import javax.management.AttributeList;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +27,8 @@ import java.util.List;
 public class EmployerWorkDayDaoImpl implements EmployerWorkDayDao {
 
     //TODO затестить
-    public List<EmployerWorkDay> findEmployerWorkDayByPeriod(@Nullable Employer employer, int startPeriod, int endPeriod) {
-        String query =String.format(SqlQuery.EMPLOYER_WORK_DAY_BY_PERIOD.toString(), startPeriod, endPeriod);
-        ResultSet resultSet = EntityDb.findEntity(EmployerWorkDay.class, query);
-        List<Object> listObjects = EntityDb.findAllByResultSet(EmployerWorkDay.class, resultSet);
+    public List<EmployerWorkDay> findEmployerWorkDayByPeriod(Employer employer, int startPeriod, int endPeriod) {
+        List<Object> listObjects = EntityDb.findEmployerWorkDayHistoryByPeriod(employer, startPeriod, endPeriod);
         return convertToArrayList(listObjects);
     }
 
@@ -37,6 +36,11 @@ public class EmployerWorkDayDaoImpl implements EmployerWorkDayDao {
         ResultSet resultSet = EntityDb.findEntity(EmployerWorkDay.class, null);
         List<Object> listObjects = EntityDb.findAllByResultSet(EmployerWorkDay.class, resultSet);
         return convertToArrayList(listObjects);
+    }
+
+    @Override
+    public EmployerWorkDay findByLogin(String login) {
+        return null; //TODO сделать
     }
 
     public EmployerWorkDay save(EmployerWorkDay employerWorkDay) {
