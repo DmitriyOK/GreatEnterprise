@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * Created by Dmitriy on 16.03.2017.
  */
 
-@Target(value= ElementType.FIELD)
+@Target(value= ElementType.METHOD)
 @Retention(value= RetentionPolicy.RUNTIME)
 public @interface JoinTable {
     String name();

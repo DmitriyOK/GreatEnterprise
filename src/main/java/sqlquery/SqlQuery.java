@@ -10,7 +10,11 @@ public enum SqlQuery {
             "JOIN department ON employerWorkDay.departmentId = department.id "+
             "JOIN employer ON employerWorkDay.employerId = employer.id;"),
 
-   ALL("SELECT * FROM :tableName");
+    ALL("SELECT * FROM :tableName"),
+    FIND_BY_LOGIN("SELECT * FROM :tableName WHERE login=:login"),
+    EMPLOYER_WORK_DAY_BY_PERIOD("SELECT * FROM employer WHERE unixStratTime =>:startPeriod and unixFinishTime <=:endPeriod"),
+    INSERT_NEW_EMPOYER_WORK_DAY("INSERT INTO employerworkday(employerId, startTime, unixStartTime) values(?, ?, ?)"),
+    UPDATE_EMPLOYER_WORK_DAY("UPDATE employerworkday SET finishTime=?, unixFinishTime=? WHERE id = ?");
 
     private final String query;
 

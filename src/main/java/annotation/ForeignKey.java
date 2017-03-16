@@ -10,10 +10,10 @@ import java.lang.annotation.Target;
  */
 
 
-@Target(value= ElementType.FIELD)
+@Target(value= ElementType.METHOD)
 @Retention(value= RetentionPolicy.RUNTIME)
 public @interface ForeignKey {
 
-    String tableName();
+    String colummName();
 
 }

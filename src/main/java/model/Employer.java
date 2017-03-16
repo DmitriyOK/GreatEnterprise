@@ -2,7 +2,6 @@ package model;
 
 import annotation.Column;
 import annotation.Entity;
-import annotation.JoinTable;
 import annotation.Table;
 
 /**

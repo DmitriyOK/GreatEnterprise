@@ -12,12 +12,11 @@ import annotation.Table;
 @Table(name ="department")
 public class Department {
 
-    private int id;
-    private String name;
+    private Integer id;
+    private String departmentName;
 
     public Department() {
     }
-
 
     public int getId() {
         return id;
@@ -29,19 +28,19 @@ public class Department {
     }
 
     public String getName() {
-        return name;
+        return departmentName;
     }
 
     @Column(name = "departmentName")
-    public void setName(String name) {
-        this.name = name;
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     @Override
     public String toString() {
         return "Department{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + departmentName + '\'' +
                 '}';
     }
 }
