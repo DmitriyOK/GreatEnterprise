@@ -89,14 +89,12 @@ public class EmployerWorkDay {
 
     @Override
     public String toString() {
-        return "EmployerWorkDay{" +
-                "id=" + id +
+        return "id=" + id +
                 ", employerId=" + employerId +
                 ", startTime='" + startTime + '\'' +
                 ", finishTime='" + finishTime + '\'' +
                 ", unixStartTime=" + unixStartTime +
                 ", unixFinishTime=" + unixFinishTime +
-                ", isOnline=" + isOnline +
-                '}';
+                ", isOnline=" + isOnline ;
     }
 }

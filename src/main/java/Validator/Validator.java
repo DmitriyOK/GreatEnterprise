@@ -64,7 +64,6 @@ public abstract class Validator {
      * @param value Логин, который нужно проверить.
      * @return <p>true</p> если логин отвечает требованию.
      */
-
     public static boolean isValidLogin(String value) {
         Pattern pattern = Pattern.compile("[a-zA-Z]{1,32}");
         Matcher mathcer = pattern.matcher(value);

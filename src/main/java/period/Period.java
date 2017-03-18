@@ -69,7 +69,7 @@ public abstract class Period {
      * @return true если дата изменена или false если время окончания рабочего
      * было ранее указано и изменению не подлежит.
      */
-    public static boolean createFinishTime(EmployerWorkDay workDay ){
+    public static boolean createFinishTime(EmployerWorkDay workDay){
         if(workDay.getFinishTime() != null || workDay.getUnixFinishTime() != 0){
             return false;
         }

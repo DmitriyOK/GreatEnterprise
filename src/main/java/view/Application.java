@@ -9,11 +9,10 @@ import services.EmployerService;
 import services.EmployerWorkDayService;
 import services.impl.EmployerServiceImpl;
 import services.impl.EmployerWorkDayServiceImpl;
-
 import java.awt.event.*;
 import java.io.IOException;
-import java.net.UnknownHostException;
-import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 
 
 import javax.swing.*;
@@ -32,7 +31,8 @@ public class Application extends JFrame implements ActionListener {
     private EmployerService employerService = new EmployerServiceImpl();
     private EmployerWorkDayService employerWorkDayService = new EmployerWorkDayServiceImpl();
 
-    private String title;
+    private String title; 
+    private String formatReport;
 
     public Application() throws IOException {
 
@@ -47,23 +47,138 @@ public class Application extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginButton) {
-            if(Validator.isValidLogin(loginTextField.getText())) {
+            if (Validator.isValidLogin(loginTextField.getText())) {
                 authorization();
-            } else{
+            } else {
                 printText("Логин должен состоять из латинских букв, от 1 до 32 символа.");
             }
         }
-        if(e.getSource() == logoutButton){
+        if (e.getSource() == logoutButton) {
             logout();
         }
 
-        if(e.getSource() == startWorkDayButton){
+        if (e.getSource() == startWorkDayButton) {
             startWorkDay();
         }
 
-        if(e.getSource() == endWorkDayButton){
+        if (e.getSource() == endWorkDayButton) {
             finishWorkDay();
         }
+
+        if (e.getSource() == reportList) {
+            switch (reportList.getSelectedIndex()) {
+                case 0: // reportList: 0 "На заданный день"  1: "За период по сотруднику"
+                    //TODO не реализован SQL
+                    employerLoginTextField.setEditable(true);
+                    break;
+                case 1: //
+                    employerLoginTextField.setEditable(true);
+                    break;
+            }
+        }
+
+        if (e.getSource() == findReportButton) {
+            System.out.println("Reports");
+            switch (reportList.getSelectedIndex()) {
+                case 0: // reportList: 0 "На заданный день"  1: "За период по сотруднику"
+                    //TODO не реализован SQL
+                    findReportByDay();
+                    break;
+                case 1: //
+                    findEmployerReportByPeriod();
+                    break;
+
+            }
+        }
+    }
+
+    private void findReportByDay() {
+    }
+
+    private void findEmployerReportByPeriod() {
+        Employer employerForReport = employerService.findByLogin(employerLoginTextField.getText());
+        String aStartPeriod = startPeriodTextField.getText();
+        String aEndPeriod = endPeriodTextField.getText();
+        if(!Validator.isValidFormat(aStartPeriod) && Validator.isValidFormat(aEndPeriod)){
+            printText("Некорректный формат даты. Дата должна соответсвовать формату гггг-мм-дд");
+            return;
+        }
+        int startPeriod = Period.createPeriod(aStartPeriod);
+        int endPeriod = Period.createPeriod(aEndPeriod);
+        List<EmployerWorkDay> results = employerWorkDayService.findEmployerWorkDayByPeriod(employerForReport, startPeriod, endPeriod);
+        String reportTitle = (String.format(formatReport, employerForReport.getLogin(), aStartPeriod, aEndPeriod));
+
+        StringBuilder report = new StringBuilder();
+        report.append(reportTitle);
+        report.append("\n");
+        for (EmployerWorkDay workDay : results) {
+            report.append(workDay.toString());
+            report.append("\n");
+        }
+
+        printText(report.toString());
+
+    }
+
+
+    public static void main(String[] args) {
+
+        try {
+            DBConnection.init();
+            while (DBConnection.getConnection().isClosed()){}
+            new Application();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setClassFields() {
+
+        this.setSize(1000, 550);
+        this.setVisible(true);
+        this.add(panel);
+        this.setResizable(false);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setTitle(title);
+
+        textArea.setBounds(20, 20, 950, 360);
+        textArea.setEditable(false);
+        loginTextField.setBounds(20, 400, 150, 30);
+        passwordField.setBounds(180, 400, 150, 30);
+        startPeriodTextField.setBounds(220, 400, 150, 30);
+        endPeriodTextField.setBounds(220, 445, 150, 30);
+        employerLoginTextField.setBounds(20, 445, 150, 30);
+        employerLoginTextField.setEditable(false);
+        loginButton.setBounds(870, 400, 95, 30);
+        logoutButton.setBounds(870, 400, 95, 30);
+        findReportButton.setBounds(450, 400, 95, 30);
+        startWorkDayButton.setBounds(600, 400, 140, 30);
+        endWorkDayButton.setBounds(600, 445, 140, 30);
+
+        reportList.setBounds(20, 400, 170, 30);
+    }
+
+    private void createClassFields() {
+        panel = new JPanel();
+        textArea = new JTextArea();
+        title = "Учет рабочего времени.";
+
+        loginButton = new JButton("Войти");
+        logoutButton = new JButton("Выйти");
+        startWorkDayButton = new JButton("Начать работу");
+        endWorkDayButton = new JButton("Закончить работу");
+        findReportButton = new JButton("Отчет");
+
+        loginTextField = new JTextField("Ваш логин");
+        passwordField = new JPasswordField("Ваш пароль");
+        employerLoginTextField = new JTextField("Логин сотрудника");
+        startPeriodTextField = new JTextField("От (включительно)");
+        endPeriodTextField = new JTextField("До (включительно)");
+        formatReport = "Отчет для: %S за период с %S по %S";
+        
+
+        reportList = new JComboBox(new String[]{"На заданный день", "За период по сотруднику"});
+
     }
 
     private void logout() {
@@ -94,67 +209,13 @@ public class Application extends JFrame implements ActionListener {
         printText("Рабочий день начат: "+employerWorkDay.getStartTime());
     }
 
-    public static void main(String[] args) {
-
-        try {
-            new Application();
-            DBConnection.init();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void setClassFields() {
-
-        this.setSize(1000, 500);
-        this.setVisible(true);
-        this.add(panel);
-        this.setResizable(false);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setTitle(title);
-
-        textArea.setBounds(20, 20, 950, 360);
-        textArea.setEditable(false);
-        loginTextField.setBounds(20, 400, 150, 30);
-        passwordField.setBounds(180, 400, 150, 30);
-        startPeriodTextField.setBounds(50, 400, 150, 30);
-        endPeriodTextField.setBounds(230, 400, 150, 30);
-        loginButton.setBounds(870, 400, 95, 30);
-        logoutButton.setBounds(870, 400, 95, 30);
-        findReportButton.setBounds(450, 400, 95, 30);
-//        startWorkDayButton.setBounds();
-//        endWorkDayButton.setBounds();
-
-        reportList.setBounds(20, 400, 170, 30);
-    }
-
-    private void createClassFields() {
-        panel = new JPanel();
-        textArea = new JTextArea();
-        title = "Учет рабочего времени.";
-
-        loginButton = new JButton("Войти");
-        logoutButton = new JButton("Выйти");
-        startWorkDayButton = new JButton("Работать");
-        endWorkDayButton = new JButton("Закончить");
-        findReportButton = new JButton("Выполнить");
-
-        loginTextField = new JTextField("Ваш логин");
-        passwordField = new JPasswordField("Ваш пароль");
-        employerLoginTextField = new JTextField("Логин сотрудника");
-        startPeriodTextField = new JTextField("От (включительно)");
-        endPeriodTextField = new JTextField("До (включительно)");
-
-        reportList = new JComboBox(new String[]{"На заданный день", "За период по сотруднику"});
-
-    }
-
     private void addFieldsActionListener() {
         loginButton.addActionListener(this);
         logoutButton.addActionListener(this);
         startWorkDayButton.addActionListener(this);
         endWorkDayButton.addActionListener(this);
         reportList.addActionListener(this);
+        findReportButton.addActionListener(this);
         panel.setLayout(null);
 
     }
@@ -247,7 +308,7 @@ public class Application extends JFrame implements ActionListener {
                if (employer.getId() == -1) {
                    printText("Не правильный пароль.");
                }else {
-                   this.setTitle(title + "Пользователь: "+employer.getLogin());
+                   this.setTitle(title + " Пользователь: "+employer.getLogin());
                    showFieldOnloginAction();
                }
 
@@ -259,6 +320,11 @@ public class Application extends JFrame implements ActionListener {
     private void showFieldOnloginAction (){
             textArea.setText("Вы авторизованы");
             panel.add(startPeriodTextField);
+            panel.add(endPeriodTextField);
+            panel.add(employerLoginTextField);
+            panel.add(startWorkDayButton);
+            panel.add(endWorkDayButton);
+            panel.add(findReportButton);
             panel.remove(loginTextField);
             panel.remove(passwordField);
             panel.remove(loginButton);
@@ -274,6 +340,7 @@ public class Application extends JFrame implements ActionListener {
             panel.add(loginButton);
             panel.updateUI();
             textArea.setText("Вы вышли, не закончив рабочий день.");
+            this.setTitle(title);
     }
 
     private void clearPanelBeforeLogout(){

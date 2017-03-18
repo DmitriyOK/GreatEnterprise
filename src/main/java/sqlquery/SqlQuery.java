@@ -13,7 +13,7 @@ public enum SqlQuery {
 
     ALL("SELECT * FROM ?"),
     FIND_BY_LOGIN("SELECT * FROM :tableName WHERE login= ?"),
-    EMPLOYER_WORK_DAY_BY_PERIOD("SELECT * FROM employerworkday WHERE unixStartTime >=? and unixFinishTime <=? and employerId = ?"),
+    EMPLOYER_WORK_DAY_BY_PERIOD("SELECT * FROM employerworkday WHERE unixStartTime >=? and unixFinishTime <=? or unixFinishTime is null and employerId = ?"),
     CURRENT_EMPLOYER_WORK_DAY("SELECT * FROM employerworkday WHERE unixStartTime>= ? and employerId =?"),
     UPDATE_EMPLOYER_WORK_DAY_BEGIN("UPDATE employerworkday SET startTime =?, unixStartTime=?, isOnline =? WHERE id = ?"),
     UPDATE_EMPLOYER_WORK_DAY_END("UPDATE employerworkday SET finishTime=?, unixFinishTime=?, isOnline =? WHERE id = ?"),

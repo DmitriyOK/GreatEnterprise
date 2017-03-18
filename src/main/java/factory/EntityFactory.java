@@ -59,6 +59,10 @@ public abstract class EntityFactory {
             preparedStatement.setInt(3, employer.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
             result = findAllByResultSet(EmployerWorkDay.class, resultSet);
+
+            for(Object object : result){
+                System.out.println(object);
+            }
         }
         catch (Exception e){}
 
@@ -166,6 +170,9 @@ public abstract class EntityFactory {
                         }
                         if (Integer.TYPE.isAssignableFrom(method.getParameterTypes()[0])) {
                             method.invoke(object, resultSet.getInt(method.getAnnotation(Column.class).name()));
+                        }
+                        if (Boolean.TYPE.isAssignableFrom(method.getParameterTypes()[0])) {
+                            method.invoke(object, resultSet.getBoolean(method.getAnnotation(Column.class).name()));
                         }
                     }
                 }
