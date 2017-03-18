@@ -17,11 +17,4 @@ public interface EmployerDao {
      */
     Employer findByLogin(String login);
 
-    /**
-     * Находит в базе данных существующего пользователя
-     * по указанному логину
-     *
-     * @return {@link Employer} или null если пользователь не существует
-     */
-    List<Object> findAllEmployersLogin();
 }

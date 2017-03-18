@@ -8,5 +8,4 @@ import model.Employer;
 public interface EmployerService {
 
     Employer findByLogin(String login);
-    String[] findAllEmployersLogin();
 }

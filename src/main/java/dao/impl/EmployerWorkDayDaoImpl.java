@@ -34,7 +34,7 @@ public class EmployerWorkDayDaoImpl implements EmployerWorkDayDao {
     }
 
     public List<EmployerWorkDay> findAll(){
-        List<Object> result = ENTITY_FACTORY.findAll(EmployerWorkDay.class, null);
+        List<Object> result = ENTITY_FACTORY.findAll(EmployerWorkDay.class);
         return convertToArrayList(result);
     }
 

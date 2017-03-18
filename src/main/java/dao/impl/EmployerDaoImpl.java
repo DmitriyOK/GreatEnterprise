@@ -18,8 +18,4 @@ public class EmployerDaoImpl implements EmployerDao {
         return(Employer) ENTITY_FACTORY.findEmployerByLogin(login).get(0);
     }
 
-    @Override
-    public List<Object> findAllEmployersLogin() {
-        return ENTITY_FACTORY.findAll(Employer.class,SqlQuery.FIND_EMPLOYERS_LOGIN.toString());
-    }
 }

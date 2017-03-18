@@ -22,8 +22,4 @@ public class EmployerServiceImpl implements EmployerService {
         Employer employer = employerDao.findByLogin(login);
         return employer;
     }
-    @Override
-    public String[] findAllEmployersLogin() {
-        return (String[]) employerDao.findAllEmployersLogin().toArray();
-    }
 }

@@ -18,8 +18,8 @@ import static period.Period.plusDay;
 
 public class EntityFactory {
 
-    public  List<Object> findAll(Class aClass, String query) {
-        return findAllByResultSet(aClass, findEntity(aClass, null));
+    public  List<Object> findAll(Class aClass) {
+        return findAllByResultSet(aClass, findEntity(aClass));
     }
 
     public  List<Object> findEmployerByLogin(String login) {
@@ -157,26 +157,18 @@ public class EntityFactory {
         return employerWorkDay;
     }
 
-    private  ResultSet findEntity(Class className, String query) {
+    private  ResultSet findEntity(Class className) {
 
         PreparedStatement preparedStatement;
         Connection conn;
         ResultSet result=null;
         try {
             String tableName = getTableName(className);
-            if(query == null) {
-                query = SqlQuery.ALL.toString().replace("?", tableName);
-                conn = DBConnection.getConnection();
-                preparedStatement = conn.prepareStatement(query);
-                result=preparedStatement.executeQuery();
-            }
-            else {
-                conn = DBConnection.getConnection();
-                preparedStatement = conn.prepareStatement(query);
-                result=preparedStatement.executeQuery();
-            }
-
-        } catch (Exception e){
+            String query = SqlQuery.ALL.toString().replace("?", tableName);
+            conn = DBConnection.getConnection();
+            preparedStatement = conn.prepareStatement(query);
+            result=preparedStatement.executeQuery();
+            } catch (SQLException e) {
             e.printStackTrace();
         }
         return result;
