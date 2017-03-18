@@ -33,10 +33,6 @@ public class EmployerWorkDayServiceImpl implements EmployerWorkDayService{
         return employerWorkDayDao.findEmployerWorkDayByPeriod(employer, Period.createPeriod(startPeriod), Period.createPeriod(endPeriod));
     }
 
-    public List<EmployerWorkDay> findAll() {
-        return employerWorkDayDao.findAll();
-    }
-
     @Override
     public List<ReportCurrentDay> findReportForSelectedDay(String day) {
 

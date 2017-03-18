@@ -17,8 +17,6 @@ public enum SqlQuery {
             "WHERE (unixStartTime BETWEEN ? AND ?) "+
             "ORDER BY unixStartTime DESC"),
 
-    ALL("SELECT * FROM ? limit 1000 ORDER by 3 DESC"),
-
     FIND_BY_LOGIN("SELECT * FROM :tableName " +
             "WHERE login= ?"),
 
@@ -30,8 +28,7 @@ public enum SqlQuery {
 
     CURRENT_EMPLOYER_WORK_DAY("SELECT * FROM employerworkday WHERE unixStartTime>= ? and employerId =?"),
     UPDATE_EMPLOYER_WORK_DAY_BEGIN("UPDATE employerworkday SET startTime =?, unixStartTime=? WHERE id = ?"),
-    UPDATE_EMPLOYER_WORK_DAY_END("UPDATE employerworkday SET finishTime=?, unixFinishTime=? WHERE id = ?"),
-    FIND_EMPLOYERS_LOGIN("SELECT login FROM employer ORDER BY ASC");
+    UPDATE_EMPLOYER_WORK_DAY_END("UPDATE employerworkday SET finishTime=?, unixFinishTime=? WHERE id = ?");
 
     private final String query;
 

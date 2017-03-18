@@ -13,12 +13,10 @@ import java.util.List;
 public interface EmployerWorkDayService {
 
     List<EmployerWorkDay> findEmployerWorkDayByPeriod(Employer employer, String startPeriod, String endPeriod);
-    List<EmployerWorkDay> findAll();
     List<ReportCurrentDay> findReportForSelectedDay(String day);
     EmployerWorkDay save(EmployerWorkDay employerWorkDay);
     EmployerWorkDay findCurrentEmployerWorkDay(Employer employer);
     EmployerWorkDay updateStatus(EmployerWorkDay employerWorkDay);
-
     List<ReportCurrentDay> findCurrentDayReport();
 
 }

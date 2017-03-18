@@ -18,40 +18,29 @@ import static period.Period.plusDay;
 
 public class EntityFactory {
 
-    public  List<Object> findAll(Class aClass) {
-        return findAllByResultSet(aClass, findEntity(aClass));
-    }
-
     public  List<Object> findEmployerByLogin(String login) {
 
-        ResultSet resultSet;
-        Connection conn;
-        PreparedStatement preparedStatement;
-        String tableName = getTableName(Employer.class);
         List<Object> resultList = null;
         try {
-            conn = DBConnection.getConnection();
-            preparedStatement = conn.prepareStatement(SqlQuery.FIND_BY_LOGIN.toString().replace(":tableName", tableName));
+            String tableName = getTableName(Employer.class);
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement preparedStatement = conn.prepareStatement(SqlQuery.FIND_BY_LOGIN.toString().replace(":tableName", tableName));
             preparedStatement.setString(1,login);
-            resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
             resultList = findAllByResultSet(Employer.class, resultSet);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return resultList;
     }
 
     public  List<Object> findEmployerWorkDayHistoryByPeriod(Employer employer, int startPeriod, int endPeriod){
 
-        Connection conn;
-        PreparedStatement preparedStatement;
         List<Object> result=null;
-
         try{
-            conn=DBConnection.getConnection();
-            preparedStatement = conn.prepareStatement(SqlQuery.EMPLOYER_WORK_DAY_BY_PERIOD.toString());
+            Connection conn =DBConnection.getConnection();
+            PreparedStatement preparedStatement = conn.prepareStatement(SqlQuery.EMPLOYER_WORK_DAY_BY_PERIOD.toString());
             preparedStatement.setInt(1, startPeriod);
             preparedStatement.setInt(2, Period.plusDay(endPeriod));
             preparedStatement.setInt(3, employer.getId());
@@ -65,12 +54,11 @@ public class EntityFactory {
     }
 
     public  List<Object> findCurrentDayReport(){
-        Connection conn;
-        PreparedStatement preparedStatement;
+
         List<Object> result=null;
         try{
-            conn=DBConnection.getConnection();
-            preparedStatement = conn.prepareStatement(SqlQuery.CURRENT_DAY_REPORT.toString());
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement preparedStatement = conn.prepareStatement(SqlQuery.CURRENT_DAY_REPORT.toString());
             preparedStatement.setInt(1, currentDayUnixTime(false));
             ResultSet resultSet = preparedStatement.executeQuery();
             result = findAllByResultSet(ReportCurrentDay.class, resultSet);
@@ -80,12 +68,11 @@ public class EntityFactory {
     }
 
     public  List<Object> findSelectedDayReport(int selectedUnixTimeDay){
-        Connection conn;
-        PreparedStatement preparedStatement;
+
         List<Object> result=null;
         try{
-            conn=DBConnection.getConnection();
-            preparedStatement = conn.prepareStatement(SqlQuery.SELECTED_DAY_REPORT.toString());
+            Connection conn=DBConnection.getConnection();
+            PreparedStatement preparedStatement = conn.prepareStatement(SqlQuery.SELECTED_DAY_REPORT.toString());
             preparedStatement.setInt(1, selectedUnixTimeDay);
             preparedStatement.setInt(2, plusDay(selectedUnixTimeDay));
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -96,16 +83,14 @@ public class EntityFactory {
     }
 
     public  List<Object> findCurrentEmployerWorkDay(Employer employer) {
-            Connection conn;
-            PreparedStatement preparedStatment;
-            ResultSet resultSet;
+
             List<Object> resultList = null;
         try {
-            conn = DBConnection.getConnection();
-            preparedStatment = conn.prepareStatement(SqlQuery.CURRENT_EMPLOYER_WORK_DAY.toString());
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement preparedStatment = conn.prepareStatement(SqlQuery.CURRENT_EMPLOYER_WORK_DAY.toString());
             preparedStatment.setInt(1, currentDayUnixTime(false));
             preparedStatment.setInt(2,employer.getId());
-            resultSet = preparedStatment.executeQuery();
+            ResultSet resultSet = preparedStatment.executeQuery();
             resultList = findAllByResultSet(EmployerWorkDay.class, resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -141,11 +126,10 @@ public class EntityFactory {
     }
 
     public  EmployerWorkDay updateStatus(EmployerWorkDay employerWorkDay) {
-        Connection conn;
-        PreparedStatement preparedStatement;
+
         try {
-            conn = DBConnection.getConnection();
-            preparedStatement = conn.prepareStatement(SqlQuery.SET_STATUS.toString());
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement preparedStatement = conn.prepareStatement(SqlQuery.SET_STATUS.toString());
             preparedStatement.setBoolean(1, employerWorkDay.isOnline());
             preparedStatement.setInt(2, employerWorkDay.getId());
             preparedStatement.executeUpdate();
@@ -155,23 +139,6 @@ public class EntityFactory {
         }
 
         return employerWorkDay;
-    }
-
-    private  ResultSet findEntity(Class className) {
-
-        PreparedStatement preparedStatement;
-        Connection conn;
-        ResultSet result=null;
-        try {
-            String tableName = getTableName(className);
-            String query = SqlQuery.ALL.toString().replace("?", tableName);
-            conn = DBConnection.getConnection();
-            preparedStatement = conn.prepareStatement(query);
-            result=preparedStatement.executeQuery();
-            } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 
     private  List<Object> findAllByResultSet(Class aClass, ResultSet resultSet) {

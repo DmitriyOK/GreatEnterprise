@@ -32,12 +32,6 @@ public interface EmployerWorkDayDao {
     List<ReportCurrentDay> findBySelectedPeriod(int selectedUnixTimeDay);
 
     /**
-     * Выводит последние 1000 отработанных дней.
-     * @return {@link}
-     */
-    List<EmployerWorkDay> findAll();
-
-    /**
      * Возвращает текущий рабочий день для авторизованного сотрудника
      * Используется для манипуляции с рабочим днем в течение дня
      *

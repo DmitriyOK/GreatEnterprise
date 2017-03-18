@@ -27,15 +27,9 @@ public class EmployerWorkDayDaoImpl implements EmployerWorkDayDao {
         return convertToArrayList(result);
     }
 
-    @Override
     public List<ReportCurrentDay> findBySelectedPeriod(int selectedUnixTimeDay) {
         List<Object> result = ENTITY_FACTORY.findSelectedDayReport(selectedUnixTimeDay);
         return toArrayList(result);
-    }
-
-    public List<EmployerWorkDay> findAll(){
-        List<Object> result = ENTITY_FACTORY.findAll(EmployerWorkDay.class);
-        return convertToArrayList(result);
     }
 
     public EmployerWorkDay findCurrentEmployerWorkDay(Employer employer) {
