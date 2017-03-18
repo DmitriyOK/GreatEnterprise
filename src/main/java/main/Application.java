@@ -2,7 +2,7 @@ package main;
 
 import Validator.Validator;
 import datasource.DBConnection;
-import factory.ReportFactory;
+import factory.impl.ReportFactory;
 import model.Employer;
 import model.EmployerWorkDay;
 import model.ReportCurrentDay;

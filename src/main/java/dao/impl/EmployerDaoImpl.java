@@ -1,11 +1,8 @@
 package dao.impl;
 
 import dao.EmployerDao;
-import factory.EntityFactory;
+import factory.impl.EntityFactory;
 import model.Employer;
-import sqlquery.SqlQuery;
-
-import java.util.List;
 
 /**
  * Реализация интерфейса {@link Employer}

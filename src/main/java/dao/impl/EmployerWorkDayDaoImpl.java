@@ -5,7 +5,7 @@ package dao.impl;
 import dao.EmployerWorkDayDao;
 import model.Employer;
 import model.EmployerWorkDay;
-import factory.EntityFactory;
+import factory.impl.EntityFactory;
 import model.ReportCurrentDay;
 
 import java.util.ArrayList;

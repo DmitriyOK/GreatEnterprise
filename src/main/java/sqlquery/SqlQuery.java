@@ -20,15 +20,26 @@ public enum SqlQuery {
     FIND_BY_LOGIN("SELECT * FROM :tableName " +
             "WHERE login= ?"),
 
-    EMPLOYER_WORK_DAY_BY_PERIOD("SELECT * FROM employerworkday " +
+    EMPLOYER_WORK_DAY_BY_PERIOD("SELECT * " +
+            "FROM employerworkday " +
             "WHERE unixStartTime >=? and (unixFinishTime <=? or unixFinishTime is null) and employerId = ? " +
             "ORDER BY unixStartTime DESC"),
 
-    SET_STATUS(("UPDATE employerworkday SET isOnline=? WHERE id = ?")),
+    SET_STATUS(("UPDATE employerworkday " +
+            "SET isOnline=? " +
+            "WHERE id = ?")),
 
-    CURRENT_EMPLOYER_WORK_DAY("SELECT * FROM employerworkday WHERE unixStartTime>= ? and employerId =?"),
-    UPDATE_EMPLOYER_WORK_DAY_BEGIN("UPDATE employerworkday SET startTime =?, unixStartTime=? WHERE id = ?"),
-    UPDATE_EMPLOYER_WORK_DAY_END("UPDATE employerworkday SET finishTime=?, unixFinishTime=? WHERE id = ?");
+    CURRENT_EMPLOYER_WORK_DAY("SELECT * " +
+            "FROM employerworkday " +
+            "WHERE unixStartTime>= ? and employerId =?"),
+
+    UPDATE_EMPLOYER_WORK_DAY_BEGIN("UPDATE employerworkday " +
+            "SET startTime =?, unixStartTime=? " +
+            "WHERE id = ?"),
+
+    UPDATE_EMPLOYER_WORK_DAY_END("UPDATE employerworkday " +
+            "SET finishTime=?, unixFinishTime=? " +
+            "WHERE id = ?");
 
     private final String query;
 

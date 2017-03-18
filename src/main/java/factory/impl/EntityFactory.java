@@ -1,8 +1,9 @@
-package factory;
+package factory.impl;
 
 import annotation.Column;
 import annotation.Table;
 import datasource.DBConnection;
+import factory.AbstractEntityFactory;
 import model.Employer;
 import model.EmployerWorkDay;
 import model.ReportCurrentDay;
@@ -16,7 +17,7 @@ import java.util.*;
 import static period.Period.currentDayUnixTime;
 import static period.Period.plusDay;
 
-public class EntityFactory {
+public class EntityFactory implements AbstractEntityFactory{
 
     public  List<Object> findEmployerByLogin(String login) {
 
