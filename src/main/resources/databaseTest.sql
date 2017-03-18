@@ -30,10 +30,27 @@ CREATE TABLE employerWorkDay (
   finishTime     DATETIME,
   unixStartTime  INT(11),
   unixFinishTime INT(11),
+  isOnLine         TINYINT(1) DEFAULT FALSE,
 
   FOREIGN KEY (employerId) REFERENCES employer (id)
 )
   ENGINE = InnoDB;
+
+SET GLOBAL event_scheduler = ON;
+
+DELIMITER $$
+
+CREATE
+EVENT `startEmployerWorkDay`
+  ON SCHEDULE EVERY 1 DAY STARTS '2017-03-16 03:00:00'
+DO BEGIN
+  INSERT INTO employerworkday(employerId, startTime, unixStartTime)
+    SELECT employer.id, now(), unix_timestamp(now())
+    FROM employer;
+
+END $$
+
+DELIMITER ;
 
 INSERT INTO department (departmentName) VALUES ('Back-End');
 INSERT INTO department (departmentName) VALUES ('Front-End' );
@@ -51,6 +68,20 @@ INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES
 INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('mmorozova', 'test', 'Marina', 'Morozova',3);
 INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('vorlov', 'test', 'Vladimir', 'Orlov',4);
 INSERT INTO employer (login, password, firstName, lastName, departmentId) VALUES ('zivanova', 'test', 'Zoya', 'Ivanova',5);
+
+INSERT INTO employerWorkDay (employerId,unixStartTime, startTime, unixFinishTime, finishTime)
+VALUES(1, 1489495210, FROM_UNIXTIME(1489495210),1489516810, FROM_UNIXTIME(1489516810));
+
+INSERT INTO employerWorkDay (employerId,unixStartTime, startTime, unixFinishTime, finishTime)
+VALUES(1, 1489570810, FROM_UNIXTIME(1489570810), 1489603210, FROM_UNIXTIME(1489603210));
+
+INSERT INTO employerWorkDay (employerId,unixStartTime, startTime, unixFinishTime, finishTime)
+VALUES(1, 1489660810, FROM_UNIXTIME(1489660810),1489689610, FROM_UNIXTIME(1489689610));
+
+INSERT INTO employerWorkDay (employerId,unixStartTime, startTime, unixFinishTime, finishTime)
+VALUES(1, 1489743610, FROM_UNIXTIME(1489743610), 1489772410, FROM_UNIXTIME(1489772410));
+
+
 
 DROP PROCEDURE IF EXISTS loadTestData;
 
@@ -74,23 +105,6 @@ CREATE PROCEDURE loadTestData()
 DELIMITER ;
 
 CALL loadTestData();
-
-SET GLOBAL event_scheduler = ON;
-
-
-DELIMITER $$
-
-CREATE
-EVENT `startEmployerWorkDay`
-  ON SCHEDULE EVERY 1 DAY STARTS '2017-03-16 03:00:00'
-DO BEGIN
-  INSERT INTO employerworkday(employerId)
-    SELECT employer.id
-    FROM employer;
-
-END $$
-
-DELIMITER ;
 
 SELECT * FROM employerWorkDay;
 #

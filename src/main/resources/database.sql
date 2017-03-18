@@ -30,6 +30,7 @@ CREATE TABLE employerWorkDay (
   finishTime     DATETIME,
   unixStartTime  INT(11),
   unixFinishTime INT(11),
+  onLine         TINYINT DEFAULT FALSE,
 
   FOREIGN KEY (employerId) REFERENCES employer (id)
 )
@@ -41,10 +42,10 @@ DELIMITER $$
 
 CREATE
 EVENT `startEmployerWorkDay`
-  ON SCHEDULE EVERY 1 DAY STARTS '2017-03-16 03:00:00'
+  ON SCHEDULE EVERY 1 DAY STARTS '2017-03-16 00:00:00'
 DO BEGIN
-  INSERT INTO employerworkday(employerId)
-    SELECT employer.id
+  INSERT INTO employerworkday(employerId, startTime, unixStartTime)
+    SELECT employer.id, now(), unix_timestamp(now())
     FROM employer;
 
 END $$

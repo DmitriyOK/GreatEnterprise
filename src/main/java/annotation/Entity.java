@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by Dmitriy on 16.03.2017.
+ * Аннтоация представляет запись в базе данных как Java - объект.
  */
 
 

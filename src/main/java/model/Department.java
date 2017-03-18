@@ -5,7 +5,7 @@ import annotation.Entity;
 import annotation.Table;
 
 /**
- * Created by Dmitriy on 15.03.2017.
+ * Простой Java-объект для представления записи таблицы "department"
  */
 
 @Entity
@@ -22,6 +22,7 @@ public class Department {
     public void setId(int id) {
         this.id = id;
     }
+
     @Column(name = "departmentName")
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
@@ -30,6 +31,7 @@ public class Department {
     public int getId() {
         return id;
     }
+
     public String getName() {
         return departmentName;
     }

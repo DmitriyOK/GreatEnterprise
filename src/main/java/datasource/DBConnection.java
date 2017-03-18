@@ -1,30 +1,49 @@
 package datasource;
 
+import factory.EntityFactory;
+
+import java.io.*;
 import java.sql.*;
+import java.util.Properties;
 
 
 /**
- * Created by Dmitriy on 15.03.2017.
+ * Класс для получения соединения с базой данных.
  */
 
+public abstract class DBConnection {
 
-public class DBConnection {
+    private static Connection connection;
+    private static Properties properties = new Properties();
+    private static  String dataBaseUrl, username, password;
+    private static boolean isInit;
 
-    private static final String URL = "jdbc:mysql://localhost:3306/worktime";
-    private static String username = "root";
-    private static String password = "root";
+    /**
+     * Получает подключение к базе данных
+     *
+     * @return {@link Connection}
+     * @throws SQLException
+     */
 
-
-    static {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+    public static boolean init() {
+        if (!isInit) {
+            try {
+                properties.load(new FileInputStream("config.properties"));
+                Class.forName(properties.getProperty("driverClassName"));
+                dataBaseUrl = properties.getProperty("dataBaseUrl");
+                username = properties.getProperty("username");
+                password = properties.getProperty("password");
+                connection = DriverManager.getConnection(dataBaseUrl, username, password);
+                connection.createStatement().execute("SELECT 1");
+                isInit = true;
+            } catch (Exception e) {
+            }
         }
+        return isInit;
     }
 
     public static Connection getConnection() throws SQLException {
-    return DriverManager.getConnection(URL, username, password);
-    }
+        return connection;
+        }
 }
 

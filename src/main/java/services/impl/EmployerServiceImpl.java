@@ -1,5 +1,6 @@
 package services.impl;
 
+import Validator.Validator;
 import dao.EmployerDao;
 import dao.impl.EmployerDaoImpl;
 import model.Employer;
@@ -13,6 +14,11 @@ public class EmployerServiceImpl implements EmployerService {
     EmployerDao employerDao = new EmployerDaoImpl();
 
     public Employer findByLogin(String login) {
-        return employerDao.findByLogin(login);
+        Employer employer = employerDao.findByLogin(login);
+        return employer;
+    }
+    @Override
+    public String[] findAllEmployersLogin() {
+        return (String[]) employerDao.findAllEmployersLogin().toArray();
     }
 }

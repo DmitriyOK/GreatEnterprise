@@ -3,9 +3,10 @@ package services;
 import model.Employer;
 
 /**
- * Created by Dmitriy on 16.03.2017.
+ * Сервис класс для {@link Employer}
  */
 public interface EmployerService {
 
     Employer findByLogin(String login);
+    String[] findAllEmployersLogin();
 }

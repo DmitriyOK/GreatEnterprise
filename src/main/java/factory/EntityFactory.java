@@ -2,60 +2,29 @@ package factory;
 
 import annotation.Column;
 import annotation.Table;
-import com.sun.istack.internal.Nullable;
-
 import datasource.DBConnection;
 import model.Employer;
 import model.EmployerWorkDay;
+import model.ReportCurrentDay;
 import sqlquery.SqlQuery;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 
-/**
- * Created by Dmitriy on 16.03.2017.
- */
-public class EntityDb {
+import static period.Period.currentDay;
 
-    public static void main(String[] args) throws SQLException, InvocationTargetException, IllegalAccessException, InstantiationException, ParseException, InterruptedException {
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        EmployerWorkDay newDay = new EmployerWorkDay();
-//        java.util.Date date = new java.util.Date();
-//        newDay.setEmployerId(1);
-//        EmployerWorkDayDaoImpl dayDao = new EmployerWorkDayDaoImpl();
-//        ArrayList<EmployerWorkDay> result = (ArrayList) dayDao.findAll();
-//        for(EmployerWorkDay emp: result)
-//            System.out.println(emp);
+public abstract class EntityFactory {
 
-
-
-
-//        newDay.setStartTime(format.format(date));
-//        newDay.setUnixStartTime((int)(date.getTime()/1000));
-//        EntityDb.saveEntity(newDay);
-//
-//        Thread.sleep(10000);
-//        date=new java.util.Date();
-//        newDay.setFinishTime(format.format(date));
-//        newDay.setUnixFinishTime((int)(date.getTime()/1000));
-//        EntityDb.saveEntity(newDay);
-//
-//        System.out.println(newDay);
-//        ResultSet rs = EntityDb.findEntity(Employer.class,null);
-//        List<Object> allByResultSet = EntityDb.findAllByResultSet(Employer.class, rs);
-//        System.out.println(allByResultSet);
-
-        EntityDb.findCurrentDayReport();
-
+    public boolean validationQuery(){
+    return true;
     }
 
-    public static Employer findEmployerByLogin(Class<Employer> employerClass, String login) {
+    public static List<Object> findAll(Class aClass, String query) {
+        return findAllByResultSet(aClass, findEntity(aClass, null));
+    }
+
+    public static List<Object> findEmployerByLogin(String login) {
 
         ResultSet resultSet;
         Connection conn;
@@ -66,21 +35,15 @@ public class EntityDb {
             conn = DBConnection.getConnection();
             preparedStatement = conn.prepareStatement(SqlQuery.FIND_BY_LOGIN.toString().replace(":tableName", tableName));
             preparedStatement.setString(1,login);
-             resultSet = preparedStatement.executeQuery();
-             resultList = findAllByResultSet(Employer.class, resultSet);
+            resultSet = preparedStatement.executeQuery();
+            resultList = findAllByResultSet(Employer.class, resultSet);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return (Employer) resultList.get(0);
+        return resultList;
     }
-
-
-
-
-
-    /*ГОТОВЫЕ МЕТОДЫ*/
 
     public static List<Object> findEmployerWorkDayHistoryByPeriod(Employer employer, int startPeriod, int endPeriod){
 
@@ -103,72 +66,70 @@ public class EntityDb {
     }
 
     public static List<Object> findCurrentDayReport(){
-
-        int startDay;
-        long temp;
-
-        java.util.Date date = new java.util.Date();
-        temp = date.getTime()/1000;
-        temp = temp/86400;
-        startDay = (int) temp*86400;
-
-
         Connection conn;
         PreparedStatement preparedStatement;
         List<Object> result=null;
-
         try{
             conn=DBConnection.getConnection();
             preparedStatement = conn.prepareStatement(SqlQuery.CURRENT_DAY_REPORT.toString());
-            preparedStatement.setInt(1, startDay);
+            preparedStatement.setInt(1, currentDay());
             ResultSet resultSet = preparedStatement.executeQuery();
-            result = findAllByResultSet(EmployerWorkDay.class, resultSet);
+            result = findAllByResultSet(ReportCurrentDay.class, resultSet);
         }
         catch (Exception e){e.printStackTrace();}
-
-        for(Object obj : result){
-            System.out.println(obj);
-        }
-
         return result;
     }
 
-    public static EmployerWorkDay saveEntity(EmployerWorkDay employerWorkDay) {
+    public static List<Object> findCurrentEmployerWorkDay(Employer employer) {
+            Connection conn;
+            PreparedStatement preparedStatment;
+            ResultSet resultSet;
+            List<Object> resultList = null;
+        try {
+            conn = DBConnection.getConnection();
+            preparedStatment = conn.prepareStatement(SqlQuery.CURRENT_EMPLOYER_WORK_DAY.toString());
+            preparedStatment.setInt(1, currentDay());
+            preparedStatment.setInt(2,employer.getId());
+            resultSet = preparedStatment.executeQuery();
+            resultList = findAllByResultSet(EmployerWorkDay.class, resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultList;
+    }
 
+    public static EmployerWorkDay saveEmployerWorkDay(EmployerWorkDay employerWorkDay) {
         Connection conn;
         PreparedStatement preparedStatement;
         try {
             conn = DBConnection.getConnection();
-            if (employerWorkDay.getId() == null) {
-                preparedStatement = conn.prepareStatement(SqlQuery.INSERT_NEW_EMPOYER_WORK_DAY.toString(),
-                        Statement.RETURN_GENERATED_KEYS);
-
-                preparedStatement.setInt(1, employerWorkDay.getEmployerId());
-                preparedStatement.setString(2, employerWorkDay.getStartTime());
-                preparedStatement.setInt(3, employerWorkDay.getUnixStartTime());
+            if (!employerWorkDay.isOnline()) {
+                preparedStatement = conn.prepareStatement(SqlQuery.UPDATE_EMPLOYER_WORK_DAY_BEGIN.toString());
+                preparedStatement.setString(1, employerWorkDay.getStartTime());
+                preparedStatement.setInt(2, employerWorkDay.getUnixStartTime());
+                preparedStatement.setBoolean(3, true);
+                preparedStatement.setInt(4, employerWorkDay.getId());
                 preparedStatement.executeUpdate();
+                employerWorkDay.setOnline(true);
 
-                ResultSet rs = preparedStatement.getGeneratedKeys();
-                if(rs.next()) {
-                    employerWorkDay.setId(rs.getInt(1));
-                }
             } else {
-                preparedStatement = conn.prepareStatement(SqlQuery.UPDATE_EMPLOYER_WORK_DAY.toString());
-                preparedStatement.setString(1,employerWorkDay.getFinishTime());
-                preparedStatement.setInt(2,employerWorkDay.getUnixFinishTime());
-                preparedStatement.setInt(3, employerWorkDay.getId());
+                preparedStatement = conn.prepareStatement(SqlQuery.UPDATE_EMPLOYER_WORK_DAY_END.toString());
+                preparedStatement.setString(1, employerWorkDay.getFinishTime());
+                preparedStatement.setInt(2, employerWorkDay.getUnixFinishTime());
+                preparedStatement.setBoolean(3, false);
+                preparedStatement.setInt(4, employerWorkDay.getId());
                 preparedStatement.executeUpdate();
+                employerWorkDay.setOnline(false);
             }
 
         } catch (SQLException e){
-            System.out.println("EntityDb");
             e.printStackTrace();
         }
 
         return employerWorkDay;
     }
 
-    public static ResultSet findEntity(Class className, @Nullable String query) {
+    private static ResultSet findEntity(Class className, String query) {
 
         PreparedStatement preparedStatement;
         Connection conn;
@@ -193,7 +154,7 @@ public class EntityDb {
         return result;
     }
 
-    public static List<Object> findAllByResultSet(Class aClass, ResultSet resultSet) {
+    private static List<Object> findAllByResultSet(Class aClass, ResultSet resultSet) {
         List<Object> objects = new ArrayList<Object>();
         try {
             while (resultSet.next()) {
@@ -229,4 +190,5 @@ public class EntityDb {
         return tableName;
     }
 }
+
 

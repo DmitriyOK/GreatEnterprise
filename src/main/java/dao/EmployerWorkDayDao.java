@@ -1,10 +1,8 @@
 package dao;
 
-import com.sun.istack.internal.Nullable;
+
 import model.Employer;
 import model.EmployerWorkDay;
-
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -14,9 +12,8 @@ public interface EmployerWorkDayDao {
 
     List<EmployerWorkDay> findEmployerWorkDayByPeriod(Employer employer, int startPeriod, int endPeriod);
     List<EmployerWorkDay> findAll();
-    EmployerWorkDay findByLogin(String login);
+    EmployerWorkDay findCurrentEmployerWorkDay(Employer employer);
     EmployerWorkDay save(EmployerWorkDay employerWorkDay);
-
-
+    List<EmployerWorkDay> currentDayReport();
 }
 

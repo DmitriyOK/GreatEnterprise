@@ -1,12 +1,8 @@
 package services;
 
-import com.sun.istack.internal.Nullable;
+
 import model.Employer;
 import model.EmployerWorkDay;
-
-import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -16,6 +12,7 @@ public interface EmployerWorkDayService {
 
     List<EmployerWorkDay> findEmployerWorkDayByPeriod(Employer employer, int startPeriod, int endPeriod);
     List<EmployerWorkDay> findAll();
-    EmployerWorkDay findByLogin();
     EmployerWorkDay save(EmployerWorkDay employerWorkDay);
+    EmployerWorkDay findCurrentEmployerWorkDay(Employer employer);
+    List<EmployerWorkDay> currentDayReport();
 }

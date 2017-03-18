@@ -24,13 +24,19 @@ public class EmployerWorkDayServiceImpl implements EmployerWorkDayService{
         return employerWorkDayDao.findAll();
     }
 
-    @Override
-    public EmployerWorkDay findByLogin() {
-        return null; //TODO сделать
-    }
 
     public EmployerWorkDay save(EmployerWorkDay employerWorkDay) {
         return employerWorkDayDao.save(employerWorkDay);
+    }
+
+    @Override
+    public EmployerWorkDay findCurrentEmployerWorkDay(Employer employer) {
+        return employerWorkDayDao.findCurrentEmployerWorkDay(employer);
+    }
+
+    @Override
+    public List<EmployerWorkDay> currentDayReport() {
+        return employerWorkDayDao.currentDayReport();
     }
 
 }

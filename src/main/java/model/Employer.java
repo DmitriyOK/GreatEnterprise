@@ -5,7 +5,7 @@ import annotation.Entity;
 import annotation.Table;
 
 /**
- * Created by Dmitriy on 15.03.2017.
+ * Простой Java-oбъект для представления записи таблицы "employer"
  */
 
 @Entity
@@ -69,7 +69,7 @@ public class Employer {
         return "Employer{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + null + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';

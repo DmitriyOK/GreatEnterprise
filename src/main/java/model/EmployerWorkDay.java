@@ -5,7 +5,7 @@ import annotation.*;
 import java.util.Date;
 
 /**
- * Created by Dmitriy on 15.03.2017.
+ * Простой Java-объект для представления данных таблицы "employerworkday"
  */
 
 @Entity
@@ -18,8 +18,7 @@ public class EmployerWorkDay {
     private String finishTime;
     private int unixStartTime;
     private int unixFinishTime;
-    private Employer employer;
-    private Department department;
+    private boolean isOnline;
 
 
     public EmployerWorkDay() {
@@ -39,6 +38,7 @@ public class EmployerWorkDay {
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
+
     @Column(name="finishTime")
     public void setFinishTime(String finishTime) {
         this.finishTime = finishTime;
@@ -54,16 +54,13 @@ public class EmployerWorkDay {
         this.unixFinishTime = unixFinishTime;
     }
 
-    @JoinTable(name = "employer", columnName = "id")
-    @ForeignKey(colummName="employerId")
-    public void setEmployer(Employer employer) {
-        this.employer = employer;
+    @Column(name ="isOnline")
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 
-    @JoinTable(name="department", columnName = "id")
-    @ForeignKey(colummName = "departmentId")
-    public void setDepartment(Department department) {
-        this.department = department;
+    public boolean isOnline() {
+        return isOnline;
     }
 
     public Integer getId() {
@@ -90,16 +87,6 @@ public class EmployerWorkDay {
         return unixFinishTime;
     }
 
-    public Employer getEmployer() {
-        return employer;
-    }
-
-    public Department getDepartment() {
-        return department;
-    }
-
-
-
     @Override
     public String toString() {
         return "EmployerWorkDay{" +
@@ -109,6 +96,7 @@ public class EmployerWorkDay {
                 ", finishTime='" + finishTime + '\'' +
                 ", unixStartTime=" + unixStartTime +
                 ", unixFinishTime=" + unixFinishTime +
+                ", isOnline=" + isOnline +
                 '}';
     }
 }

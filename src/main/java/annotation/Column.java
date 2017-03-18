@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by Dmitriy on 15.03.2017.
+ * Аннотация используется для сеттеров классов - сущностей.
+ * Такие классы должны быть отмечены аннотацией {@link Entity}
  */
 
 @Target(value= ElementType.METHOD)

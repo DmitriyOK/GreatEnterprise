@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by Dmitriy on 15.03.2017.
+ * Аннотация представляет существующую таблицу в базе данных.
  */
 
 @Target(value= ElementType.TYPE)
