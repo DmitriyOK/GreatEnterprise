@@ -76,13 +76,11 @@ public class ReportCurrentDay {
 
     @Override
     public String toString() {
-        return "ReportCurrentDay{" +
-                ", login='" + login + '\'' +
-                ", isOnline=" + isOnline +
-                "startTime='" + startTime + '\'' +
+        return  "  login='" + login + '\'' +
+                "  startTime='" + startTime + '\'' +
                 ", finishTime='" + finishTime + '\'' +
                 ", unixStartTime=" + unixStartTime +
                 ", unixFinishTime=" + unixFinishTime +
-                '}';
+                ", isOnline=" + isOnline;
     }
 }

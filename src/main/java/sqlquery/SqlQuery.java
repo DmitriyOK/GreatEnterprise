@@ -11,12 +11,26 @@ public enum SqlQuery {
     "WHERE unixStartTime >=? "+
     "ORDER BY unixStartTime DESC"),
 
-    ALL("SELECT * FROM ?"),
-    FIND_BY_LOGIN("SELECT * FROM :tableName WHERE login= ?"),
-    EMPLOYER_WORK_DAY_BY_PERIOD("SELECT * FROM employerworkday WHERE unixStartTime >=? and unixFinishTime <=? or unixFinishTime is null and employerId = ?"),
+    SELECTED_DAY_REPORT("SELECT  login, startTime, finishTime, unixStartTime, unixFinishTime, isOnLine "+
+            "FROM employerworkday "+
+            "JOIN employer ON employer.id = employerworkday.employerId "+
+            "WHERE (unixStartTime BETWEEN ? AND ?) "+
+            "ORDER BY unixStartTime DESC"),
+
+    ALL("SELECT * FROM ? limit 1000 ORDER by 3 DESC"),
+
+    FIND_BY_LOGIN("SELECT * FROM :tableName " +
+            "WHERE login= ?"),
+
+    EMPLOYER_WORK_DAY_BY_PERIOD("SELECT * FROM employerworkday " +
+            "WHERE unixStartTime >=? and (unixFinishTime <=? or unixFinishTime is null) and employerId = ? " +
+            "ORDER BY unixStartTime DESC"),
+
+    SET_STATUS(("UPDATE employerworkday SET isOnline=? WHERE id = ?")),
+
     CURRENT_EMPLOYER_WORK_DAY("SELECT * FROM employerworkday WHERE unixStartTime>= ? and employerId =?"),
-    UPDATE_EMPLOYER_WORK_DAY_BEGIN("UPDATE employerworkday SET startTime =?, unixStartTime=?, isOnline =? WHERE id = ?"),
-    UPDATE_EMPLOYER_WORK_DAY_END("UPDATE employerworkday SET finishTime=?, unixFinishTime=?, isOnline =? WHERE id = ?"),
+    UPDATE_EMPLOYER_WORK_DAY_BEGIN("UPDATE employerworkday SET startTime =?, unixStartTime=? WHERE id = ?"),
+    UPDATE_EMPLOYER_WORK_DAY_END("UPDATE employerworkday SET finishTime=?, unixFinishTime=? WHERE id = ?"),
     FIND_EMPLOYERS_LOGIN("SELECT login FROM employer ORDER BY ASC");
 
     private final String query;

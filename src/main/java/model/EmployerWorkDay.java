@@ -2,8 +2,6 @@ package model;
 
 import annotation.*;
 
-import java.util.Date;
-
 /**
  * Простой Java-объект для представления данных таблицы "employerworkday"
  */

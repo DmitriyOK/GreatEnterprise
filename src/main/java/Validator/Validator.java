@@ -3,6 +3,7 @@ package Validator;
 import model.Employer;
 import services.EmployerService;
 import services.impl.EmployerServiceImpl;
+import main.Application;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,15 +27,21 @@ public abstract class Validator {
      * @return {@Employer}
      */
     public static Employer authorization(String login, String password) {
-        Employer employer = employerService.findByLogin(login);
-        if (chekPassword(employer, login, password)) ;
-        else {
-            employer = new Employer();
-            employer.setLogin(login);
-            employer.setPassword(password);
-            employer.setId(-1);
+
+        Employer mockEmployer = new Employer();
+        mockEmployer.setLogin(login);
+        mockEmployer.setPassword(password);
+        mockEmployer.setId(-1);
+
+        try {
+            Employer employer = employerService.findByLogin(login);
+            if (chekPassword(employer, login, password)){
+                return employer;
+            }
+        } catch (IndexOutOfBoundsException e) {
+            Application.printText("Пользователь с указанным логином не найден. login: " + login);
         }
-        return employer;
+        return mockEmployer;
     }
 
     /**
@@ -52,7 +59,7 @@ public abstract class Validator {
                 date = null;
             }
         } catch (ParseException ex) {
-            ex.printStackTrace();
+           return date != null;
         }
         return date != null;
     }
@@ -61,13 +68,32 @@ public abstract class Validator {
      * Если логин состоит из латинских букв, длинной
      * от 1 до 32 символов возвращается true.
      *
-     * @param value Логин, который нужно проверить.
+     * @param login Логин, который нужно проверить.
      * @return <p>true</p> если логин отвечает требованию.
      */
-    public static boolean isValidLogin(String value) {
+    public static boolean isValidLogin(String login) {
+
+        if (login == null){
+            return false;
+        }
+
         Pattern pattern = Pattern.compile("[a-zA-Z]{1,32}");
-        Matcher mathcer = pattern.matcher(value);
+        Matcher mathcer = pattern.matcher(login);
         return mathcer.matches();
+    }
+
+
+    /**
+     * Проверяет является ли переданный файл *.properties - файлом
+     *
+     * @param fileName загружаемый файл.
+     *
+     * @return результат проверки
+     */
+    public static boolean isPropertiesFile(String fileName){
+
+        String pattern = ".properties";
+        return fileName.substring(fileName.lastIndexOf(".")).equals(pattern);
     }
 
     private static boolean chekPassword(Employer employer, String login, String password) {

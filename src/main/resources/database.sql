@@ -30,7 +30,7 @@ CREATE TABLE employerWorkDay (
   finishTime     DATETIME,
   unixStartTime  INT(11),
   unixFinishTime INT(11),
-  onLine         TINYINT DEFAULT FALSE,
+  isOnline         TINYINT DEFAULT FALSE,
 
   FOREIGN KEY (employerId) REFERENCES employer (id)
 )

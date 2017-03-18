@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Аннотация представляет существующую таблицу в базе данных.
+ * Аннотация указывает к какой таблице относится класс
+ * отмеченный аннотацией {@link Entity}
  */
 
 @Target(value= ElementType.TYPE)

@@ -6,8 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+
  * Аннотация используется для сеттеров классов - сущностей.
  * Такие классы должны быть отмечены аннотацией {@link Entity}
+ *
+ * Аннотация указывает соответствие переменным объекта и значения поля
+ * из таблицы базы данных
  */
 
 @Target(value= ElementType.METHOD)

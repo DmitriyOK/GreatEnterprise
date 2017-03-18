@@ -8,15 +8,18 @@ import sqlquery.SqlQuery;
 import java.util.List;
 
 /**
- * Created by Dmitriy on 16.03.2017.
+ * Реализация интерфейса {@link Employer}
  */
 public class EmployerDaoImpl implements EmployerDao {
+
+    private final EntityFactory ENTITY_FACTORY = new EntityFactory();
+
     public Employer findByLogin(String login) {
-        return(Employer) EntityFactory.findEmployerByLogin(login).get(0);
+        return(Employer) ENTITY_FACTORY.findEmployerByLogin(login).get(0);
     }
 
     @Override
     public List<Object> findAllEmployersLogin() {
-        return EntityFactory.findAll(Employer.class,SqlQuery.FIND_EMPLOYERS_LOGIN.toString());
+        return ENTITY_FACTORY.findAll(Employer.class,SqlQuery.FIND_EMPLOYERS_LOGIN.toString());
     }
 }

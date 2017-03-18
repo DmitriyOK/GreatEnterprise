@@ -3,6 +3,8 @@ package services;
 
 import model.Employer;
 import model.EmployerWorkDay;
+import model.ReportCurrentDay;
+
 import java.util.List;
 
 /**
@@ -10,9 +12,13 @@ import java.util.List;
  */
 public interface EmployerWorkDayService {
 
-    List<EmployerWorkDay> findEmployerWorkDayByPeriod(Employer employer, int startPeriod, int endPeriod);
+    List<EmployerWorkDay> findEmployerWorkDayByPeriod(Employer employer, String startPeriod, String endPeriod);
     List<EmployerWorkDay> findAll();
+    List<ReportCurrentDay> findReportForSelectedDay(String day);
     EmployerWorkDay save(EmployerWorkDay employerWorkDay);
     EmployerWorkDay findCurrentEmployerWorkDay(Employer employer);
-    List<EmployerWorkDay> currentDayReport();
+    EmployerWorkDay updateStatus(EmployerWorkDay employerWorkDay);
+
+    List<ReportCurrentDay> findCurrentDayReport();
+
 }

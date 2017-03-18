@@ -6,42 +6,68 @@ import dao.EmployerWorkDayDao;
 import model.Employer;
 import model.EmployerWorkDay;
 import factory.EntityFactory;
+import model.ReportCurrentDay;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Dmitriy on 16.03.2017.
+ * Реализация интерфейса {@link EmployerWorkDayDao}
+ *
+ * Загружает объекты из базы данных и приводит к конкретному типу.
+ * Результат представлен как {@link ArrayList} объектов {@link EmployerWorkDay} и {@link ReportCurrentDay}.
+ *
  */
 public class EmployerWorkDayDaoImpl implements EmployerWorkDayDao {
 
-    //TODO затестить
+   private final EntityFactory ENTITY_FACTORY = new EntityFactory();
+
     public List<EmployerWorkDay> findEmployerWorkDayByPeriod(Employer employer, int startPeriod, int endPeriod) {
-        List<Object> listObjects = EntityFactory.findEmployerWorkDayHistoryByPeriod(employer, startPeriod, endPeriod);
-        return convertToArrayList(listObjects);
+        List<Object> result = ENTITY_FACTORY.findEmployerWorkDayHistoryByPeriod(employer, startPeriod, endPeriod);
+        return convertToArrayList(result);
+    }
+
+    @Override
+    public List<ReportCurrentDay> findBySelectedPeriod(int selectedUnixTimeDay) {
+        List<Object> result = ENTITY_FACTORY.findSelectedDayReport(selectedUnixTimeDay);
+        return toArrayList(result);
     }
 
     public List<EmployerWorkDay> findAll(){
-        List<Object> listObjects = EntityFactory.findAll(EmployerWorkDay.class, null);
-        return convertToArrayList(listObjects);
+        List<Object> result = ENTITY_FACTORY.findAll(EmployerWorkDay.class, null);
+        return convertToArrayList(result);
     }
 
     public EmployerWorkDay findCurrentEmployerWorkDay(Employer employer) {
-        List<Object> currentEmployerWorkDay = EntityFactory.findCurrentEmployerWorkDay(employer);
-        return convertToArrayList(currentEmployerWorkDay).get(0);
+        List<Object> result = ENTITY_FACTORY.findCurrentEmployerWorkDay(employer);
+        return convertToArrayList(result).get(0);
+    }
+
+    public List<ReportCurrentDay> findCurrentDayReport() {
+        return toArrayList(ENTITY_FACTORY.findCurrentDayReport());
     }
 
     public EmployerWorkDay save(EmployerWorkDay employerWorkDay) {
-        return EntityFactory.saveEmployerWorkDay(employerWorkDay);
+        return ENTITY_FACTORY.saveEmployerWorkDay(employerWorkDay);
     }
 
-    public List<EmployerWorkDay> currentDayReport() {
-        return convertToArrayList(EntityFactory.findCurrentDayReport());
+    @Override
+    public EmployerWorkDay updateStatus(EmployerWorkDay employerWorkDay) {
+        return ENTITY_FACTORY.updateStatus(employerWorkDay);
     }
 
-    private ArrayList<EmployerWorkDay> convertToArrayList(List listObjects){
-        ArrayList<EmployerWorkDay> result = new ArrayList<EmployerWorkDay>();
+    private List<EmployerWorkDay> convertToArrayList(List listObjects){
+        List<EmployerWorkDay> result = new ArrayList<EmployerWorkDay>();
         for (Object object : listObjects) {
             result.add((EmployerWorkDay) object);
+        }
+        return result;
+    }
+
+    private List<ReportCurrentDay> toArrayList(List listObjects){
+        List<ReportCurrentDay> result = new ArrayList<ReportCurrentDay>();
+        for (Object object : listObjects) {
+            result.add((ReportCurrentDay) object);
         }
         return result;
     }

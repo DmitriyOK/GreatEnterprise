@@ -14,6 +14,11 @@ public class EmployerServiceImpl implements EmployerService {
     EmployerDao employerDao = new EmployerDaoImpl();
 
     public Employer findByLogin(String login) {
+
+        if(!Validator.isValidLogin(login)) {
+            return null;
+        }
+
         Employer employer = employerDao.findByLogin(login);
         return employer;
     }

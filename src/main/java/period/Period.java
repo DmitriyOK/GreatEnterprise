@@ -8,6 +8,7 @@ import java.util.Date;
 
 /**
  * Класс представляет работу с периодами даты.
+ *
  * Возвращает unixTime в секундах.
  */
 public abstract class Period {
@@ -31,16 +32,27 @@ public abstract class Period {
     }
 
     /**
-     * Возвращает начало текущего дня в секундах.
+     * Возвращает время UnixTime текущего в секундах.
+     * Если параметр finishCurrentDay равен true,
+     * вернется количество секунд на конец текущего дня,
+     * в противном случае на начало дня.
      *
-     * @return int unixTime
+     * @param finishCurrentDay - учитывать конечный период
+     * @return время unixTime в секундах
      */
-    public static int currentDay() {
+    public static int currentDayUnixTime(boolean finishCurrentDay) {
         long temp;
         java.util.Date date = new java.util.Date();
         temp = date.getTime()/1000;
         temp = temp/86400;
-        return (int) temp*86400;
+
+        if(finishCurrentDay){
+            temp += 1;
+            return (int) temp*86400;
+        }
+        else {
+            return (int) temp*86400;
+        }
     }
 
     /**
@@ -53,7 +65,7 @@ public abstract class Period {
      *         и изменению не подлежит.
      */
     public static boolean createStartTime(EmployerWorkDay workDay ){
-        if(!workDay.isOnline()) {
+        if(workDay.isOnline()) {
             Date date = new Date();
             workDay.setUnixStartTime((int) (date.getTime() / 1000));
             workDay.setStartTime(WORK_DAY_DATE_FORMAT.format(date));
@@ -80,4 +92,17 @@ public abstract class Period {
         return true;
     }
 
-}
+
+    /**
+     * Добавляет 24 часа к unixTime.
+     *
+     * @param unixTimeSeconds текущий день в UnixTime.
+     *
+     * @return возвращает следующего дня в секундах.
+     */
+
+    public static int plusDay(int unixTimeSeconds) {
+            return unixTimeSeconds+86400;
+        }
+    }
+
