@@ -15,7 +15,8 @@ import java.util.List;
  * Реализация интерфейса {@link EmployerWorkDayDao}
  *
  * Загружает объекты из базы данных и приводит к конкретному типу.
- * Результат представлен как {@link ArrayList} объектов {@link EmployerWorkDay} и {@link ReportCurrentDay}.
+ * Результат представлен как {@link ArrayList} объектов
+ * {@link EmployerWorkDay} и {@link ReportCurrentDay}.
  *
  */
 public class EmployerWorkDayDaoImpl implements EmployerWorkDayDao {
@@ -45,7 +46,7 @@ public class EmployerWorkDayDaoImpl implements EmployerWorkDayDao {
         return ENTITY_FACTORY.saveEmployerWorkDay(employerWorkDay);
     }
 
-    @Override
+
     public EmployerWorkDay updateStatus(EmployerWorkDay employerWorkDay) {
         return ENTITY_FACTORY.updateStatus(employerWorkDay);
     }

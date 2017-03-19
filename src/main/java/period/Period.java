@@ -37,14 +37,13 @@ public abstract class Period {
      * вернется количество секунд на конец текущего дня,
      * в противном случае на начало дня.
      *
-     * @param finishCurrentDay - учитывать конечный период
+     * @param finishCurrentDay учитывать конечный период
      * @return время unixTime в секундах
      */
     public static int currentDayUnixTime(boolean finishCurrentDay) {
         long temp;
         java.util.Date date = new java.util.Date();
         temp = date.getTime()/1000;
-        temp-=2160; //корректировка на часовой пояс
         temp = temp/86400;
 
         if(finishCurrentDay){
@@ -61,7 +60,7 @@ public abstract class Period {
      * Позволяет изменить время, установленное по умолчанию, если параметр <p>isOnline</p>
      * экземпляра класса {@link EmployerWorkDay} равен false
      *
-     * @param workDay - рабочий день сотрудника
+     * @param workDay рабочий день сотрудника
      * @return true если дата изменена или false если дата была ранее указана
      *         и изменению не подлежит.
      */
@@ -78,7 +77,7 @@ public abstract class Period {
     /**
      * Метод используется для изменения конца рабочего времени работника
      *
-     * @param workDay - рабочий день сотрудника
+     * @param workDay рабочий день сотрудника
      * @return true если дата изменена или false если время окончания рабочего
      * было ранее указано и изменению не подлежит.
      */
@@ -92,7 +91,6 @@ public abstract class Period {
 
         return true;
     }
-
 
     /**
      * Добавляет 24 часа к unixTime.

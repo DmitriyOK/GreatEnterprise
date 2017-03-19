@@ -6,12 +6,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Аннотация указывает к какой таблице относится класс
- * отмеченный аннотацией {@link Entity}
+ * Аннотация определяет сопоставление класса с таблицей
+ * отмеченной аннотацией {@link Entity}
+ *
  */
 
 @Target(value= ElementType.TYPE)
 @Retention(value= RetentionPolicy.RUNTIME)
 public @interface Table {
+    /**
+     * Имя аннотации должно соответствовать названию таблицы.
+     * @return имя таблицы
+     */
     String name();
 }

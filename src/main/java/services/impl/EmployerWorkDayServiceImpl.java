@@ -1,5 +1,6 @@
 package services.impl;
 
+import services.EmployerService;
 import validator.Validator;
 import dao.EmployerWorkDayDao;
 import dao.impl.EmployerWorkDayDaoImpl;
@@ -13,7 +14,7 @@ import main.Application;
 import java.util.List;
 
 /**
- * Created by Dmitriy on 16.03.2017.
+ * CРеализация интерфейса {@link EmployerWorkDayService}
  */
 public class EmployerWorkDayServiceImpl implements EmployerWorkDayService{
 
@@ -33,7 +34,6 @@ public class EmployerWorkDayServiceImpl implements EmployerWorkDayService{
         return employerWorkDayDao.findEmployerWorkDayByPeriod(employer, Period.createPeriod(startPeriod), Period.createPeriod(endPeriod));
     }
 
-    @Override
     public List<ReportCurrentDay> findReportForSelectedDay(String day) {
 
         int unixTimeDay;
@@ -47,22 +47,19 @@ public class EmployerWorkDayServiceImpl implements EmployerWorkDayService{
         return employerWorkDayDao.findBySelectedPeriod(unixTimeDay);
     }
 
-
     public EmployerWorkDay save(EmployerWorkDay employerWorkDay) {
         return employerWorkDayDao.save(employerWorkDay);
     }
 
-    @Override
+
     public EmployerWorkDay findCurrentEmployerWorkDay(Employer employer) {
         return employerWorkDayDao.findCurrentEmployerWorkDay(employer);
     }
 
-    @Override
     public EmployerWorkDay updateStatus(EmployerWorkDay employerWorkDay) {
         return employerWorkDayDao.updateStatus(employerWorkDay);
     }
 
-    @Override
     public List<ReportCurrentDay> findCurrentDayReport() {
         return employerWorkDayDao.findCurrentDayReport();
     }

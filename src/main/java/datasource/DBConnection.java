@@ -1,8 +1,8 @@
 package datasource;
 
+import handler.ExceptionHandler;
 import validator.Validator;
 import main.Application;
-
 import java.io.*;
 import java.sql.*;
 import java.util.Properties;
@@ -21,21 +21,12 @@ public abstract class DBConnection {
 
 
     /**
-     * Получает подключение к базе данных
-     *
-     * @return {@link Connection} текущее соединение
-     */
-    public static Connection getConnection() {
-        return connection;
-        }
-
-    /**
      * Инициализирует соединение с базой данных из загружаемого
-     * *.properties файла. {@link Properties} Исполняет тестовый запрос
+     * *.properties файла. {@link Properties} и сохраняет на диск
+     * для последующего использования.
+     * После установки соединения выполняется тестовый SELECT - запрос.
      * и, если успешно, устанавливает переменную isInit - true.
-     * При запуске программы соединение отстусвует, нужно загрузить
-     * *.properties - файл для установки соединения.
-     *
+
      * Имена параметров *.properties файла:
      *
      * password = пароль
@@ -52,7 +43,6 @@ public abstract class DBConnection {
                     Application.printText("Предоставленный файл не является *.properties");
                     return false;
                 }
-
                 if(propertiesFile != null && connection != null){
                     connection.close();
                 }
@@ -63,16 +53,59 @@ public abstract class DBConnection {
                 password = properties.getProperty("password");
                 connection = DriverManager.getConnection(dataBaseUrl, username, password);
                 connection.createStatement().execute("SELECT 1");
+
+                Application.printText("Соединение с базой данных установлено. Авторизуйтесь");
+                saveFileIsNotExist();
                 isInit=true;
             } catch (Exception e) {
+                ExceptionHandler.showToUser(e, false);
                 return isInit;
             }
 
         return true;
     }
 
+    private static void saveFileIsNotExist() {
+
+        if(!new File("config.properties").exists()) {
+            try {
+                properties.store(new FileOutputStream("config.properties"), null);
+                Application.printText("Файл настроек сохранен");
+            } catch (IOException e) {
+                ExceptionHandler.showToUser(e, false);
+            }
+        }
+    }
+
+    /**
+     * Загружает настройки базы данных из ранее сохраненного файла.
+     * Перед вызовом метода требуется вызвать {@link #init(File propertiesFile)}
+     */
+    public static void init()  {
+        try {
+            DBConnection.init(new File("config.properties"));
+        } catch (Exception e) {
+            ExceptionHandler.showToUser(e, false);
+        }
+    }
+
+    /**
+     * Возвращает true если класс инициализирован.
+     *
+     * @return {@link Connection} текущее состояние
+     */
     public static boolean isInit() {
         return isInit;
+    }
+
+    /**
+     *  Возврщает текущее соединение
+     *
+     *  @return {@link Connection} соединение
+     */
+    public static Connection getConnection(){
+
+        return connection;
     }
 }
 

@@ -19,7 +19,7 @@ public interface AbstractEntityFactory {
     /**
      * Находит существующего пользователя по указанному логину
      *
-     * @param login - логин пользователя
+     * @param login логин пользователя
      * @return {@link Employer} или null если пользователь не существует
      */
 
@@ -27,9 +27,9 @@ public interface AbstractEntityFactory {
 
     /** Возвращает отчет по заданному сотруднку за указанный период
      *
-     * @param employer - заданный сотрудник
-     * @param startPeriod - начало периода включительно
-     * @param endPeriod - конец периода включительно
+     * @param employer заданный сотрудник
+     * @param startPeriod начало периода включительно
+     * @param endPeriod  конец периода включительно
      * @return {@link List} отчет по заданному сотруднку за указанный период
      */
 
@@ -39,7 +39,7 @@ public interface AbstractEntityFactory {
      * Возвращает отчет за текущий день.
      * Выбранный период - 24 часа с начала календарного дня.
      *
-     * @return {@link ReportCurrentDay} - отчет за текущий день.
+     * @return {@link ReportCurrentDay} отчет за текущий день.
      */
 
       List<Object> findCurrentDayReport();
@@ -49,7 +49,7 @@ public interface AbstractEntityFactory {
      * Указывается только один параметр - отчетный день,
      * который представляет 24 часовой период с начала дня
      *
-     * @param selectedUnixTimeDay - заданный период в секундах
+     * @param selectedUnixTimeDay заданный период в секундах
      * @return {@link List} объектов
      */
 
@@ -59,8 +59,8 @@ public interface AbstractEntityFactory {
      * Возвращает текущий рабочий день для авторизованного сотрудника
      * Используется для манипуляции с рабочим днем в течение дня
      *
-     * @param employer - авторизованный сотрудник
-     * @return {@link EmployerWorkDay] - текущий рабочий день.
+     * @param employer авторизованный сотрудник
+     * @return {@link EmployerWorkDay} текущий рабочий день.
      */
 
       List<Object> findCurrentEmployerWorkDay(Employer employer);
@@ -68,8 +68,8 @@ public interface AbstractEntityFactory {
     /**
      * Сохраняет внесенные в рабочий день изменения для текущего сотрудника
      *
-     * @param employerWorkDay - актульное состояние объекта
-     * @return {@link EmployerWorkDay} - измененный объект
+     * @param employerWorkDay актульное состояние объекта
+     * @return {@link EmployerWorkDay} измененный объект
      */
 
       EmployerWorkDay saveEmployerWorkDay(EmployerWorkDay employerWorkDay);
@@ -77,7 +77,7 @@ public interface AbstractEntityFactory {
     /**
      * Обновляет статус сотрудника isOnline.
      *
-     * @param employerWorkDay - актуальный состояние объекта
+     * @param employerWorkDay актуальный состояние объекта
      * @return {@link EmployerWorkDay} измененный объект
      */
 

@@ -1,5 +1,6 @@
 package validator;
 
+import handler.ExceptionHandler;
 import model.Employer;
 import services.EmployerService;
 import services.impl.EmployerServiceImpl;
@@ -24,7 +25,7 @@ public abstract class Validator {
      *
      * @param login логин введенный пользователем
      * @param password пароль введенный пользователем
-     * @return {@Employer}
+     * @return {@link Employer}
      */
     public static Employer authorization(String login, String password) {
 
@@ -40,6 +41,9 @@ public abstract class Validator {
             }
         } catch (IndexOutOfBoundsException e) {
             Application.printText("Пользователь с указанным логином не найден. login: " + login);
+        }
+        catch (Exception e){
+            ExceptionHandler.showToUser(e, true);
         }
         return mockEmployer;
     }
@@ -58,7 +62,8 @@ public abstract class Validator {
             if (!value.equals(sdf.format(date))) {
                 date = null;
             }
-        } catch (ParseException ex) {
+        } catch (Exception e) {
+            ExceptionHandler.showToUser(e, true);
            return date != null;
         }
         return date != null;

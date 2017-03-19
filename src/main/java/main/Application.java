@@ -1,5 +1,6 @@
 package main;
 
+import handler.ExceptionHandler;
 import validator.Validator;
 import datasource.DBConnection;
 import factory.impl.ReportFactory;
@@ -22,6 +23,8 @@ import javax.swing.*;
 
 /**
  * Класс запускающий работу программы.
+ * Отвечает за регистрацию и отрисовку компонентов,
+ * обработку событий и изменения представления.
  */
 
 public class Application extends JFrame implements ActionListener {
@@ -55,7 +58,7 @@ public class Application extends JFrame implements ActionListener {
         printText("Для работы с системой загрузите настройки базы данных авторизуйтесь.");
     }
 
-    // До Main- класса идут методы инициализации представления.
+    // До main- класса идут методы инициализации представления.
 
     private void createClassFields() {
         panel = new JPanel();
@@ -222,7 +225,7 @@ public class Application extends JFrame implements ActionListener {
 
     /**
      *  Метод запускающий программу.
-     * @param args
+     * @param args аргументы программы не поддерживаются
      */
     public static void main(String[] args) {
 
@@ -230,9 +233,10 @@ public class Application extends JFrame implements ActionListener {
             public void run() {
                 try {
                     new Application();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    ExceptionHandler.showToUser(e, true);
                 }
+                DBConnection.init();
             }
         });
     }
@@ -249,7 +253,9 @@ public class Application extends JFrame implements ActionListener {
         if (e.getSource() == logoutButton) {
 
             if(employerWorkDay.isOnline()){
-                confirmFinishDay();
+                if(confirmFinishDay() == 2) {
+                    return ;
+                } //не совсем правильно
             }
             employerWorkDay.setOnline(false);
             employerWorkDay = employerWorkDayService.updateStatus(employerWorkDay);
@@ -354,11 +360,15 @@ public class Application extends JFrame implements ActionListener {
         printText(reportFactory.buildReport(reportTitle, results));
     }
 
-    private void confirmFinishDay() {
+    private int confirmFinishDay() {
         // 0=yes, 1=no, 2=cancel
-        if(JOptionPane.showConfirmDialog(null, "Закончить рабочий день?") == 0) {
-            finishWorkDay();
+        switch (JOptionPane.showConfirmDialog(null, "Закончить рабочий день?")) {
+            case 0:
+                finishWorkDay();
+                 return 0;
+            case 2: return 2;
         }
+        return 1;
     }
 
     private void finishWorkDay() {
@@ -445,6 +455,10 @@ public class Application extends JFrame implements ActionListener {
 
     public static void printText(String text){
         textArea.setText(text);
+    }
+
+    public static String getText(){
+        return textArea.getText();
     }
 
     private static boolean enterChecker(String t) {

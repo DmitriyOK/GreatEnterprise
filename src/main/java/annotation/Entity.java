@@ -6,8 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Аннтоация указывает какой класс является
- * сущностью базы данных
+ * Аннтоация определяет класс являющийся сущностью базы данных
  */
 
 @Target(value= ElementType.TYPE)

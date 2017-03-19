@@ -4,6 +4,7 @@ import annotation.Column;
 import annotation.Table;
 import datasource.DBConnection;
 import factory.AbstractEntityFactory;
+import handler.ExceptionHandler;
 import model.Employer;
 import model.EmployerWorkDay;
 import model.ReportCurrentDay;
@@ -26,9 +27,9 @@ import static period.Period.plusDay;
  * Если аннотацией отмечен не поддерживаемый тип данных,
  * значение переменной класса не будет присвоено.
  *
- * @throw {@link NoSuchElementException} когда у класса,
- *         отмеченного аннотацией {@link annotation.Entity}
- *         отсутсвует аннотация {@link annotation.Table}
+ * Обрабатывается {@link NoSuchElementException} когда у класса,
+ *          отмеченного аннотацией {@link annotation.Entity}
+ *          отсутсвует аннотация {@link annotation.Table}
  */
 public class EntityFactory implements AbstractEntityFactory{
 
@@ -43,8 +44,8 @@ public class EntityFactory implements AbstractEntityFactory{
             ResultSet resultSet = preparedStatement.executeQuery();
             resultList = findAllByResultSet(Employer.class, resultSet);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            ExceptionHandler.showToUser(e, true);
         }
         return resultList;
     }
@@ -62,7 +63,9 @@ public class EntityFactory implements AbstractEntityFactory{
             result = findAllByResultSet(EmployerWorkDay.class, resultSet);
 
         }
-        catch (Exception e){}
+        catch (Exception e){
+            ExceptionHandler.showToUser(e, true);
+        }
 
         return result;
     }
@@ -77,7 +80,9 @@ public class EntityFactory implements AbstractEntityFactory{
             ResultSet resultSet = preparedStatement.executeQuery();
             result = findAllByResultSet(ReportCurrentDay.class, resultSet);
         }
-        catch (Exception e){e.printStackTrace();}
+        catch (Exception e){
+            ExceptionHandler.showToUser(e, true);
+        }
         return result;
     }
 
@@ -92,7 +97,9 @@ public class EntityFactory implements AbstractEntityFactory{
             ResultSet resultSet = preparedStatement.executeQuery();
             result = findAllByResultSet(ReportCurrentDay.class, resultSet);
         }
-        catch (Exception e){e.printStackTrace();}
+        catch (Exception e){
+            ExceptionHandler.showToUser(e, true);
+        }
         return result;
     }
 
@@ -106,11 +113,9 @@ public class EntityFactory implements AbstractEntityFactory{
             preparedStatment.setInt(2,employer.getId());
             ResultSet resultSet = preparedStatment.executeQuery();
             resultList = findAllByResultSet(EmployerWorkDay.class, resultSet);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            ExceptionHandler.showToUser(e, true);
         }
-        System.out.println(currentDayUnixTime(false));
-        System.out.println(resultList);
         return resultList;
     }
 
@@ -134,8 +139,8 @@ public class EntityFactory implements AbstractEntityFactory{
                 preparedStatement.executeUpdate();
             }
 
-        } catch (SQLException e){
-            e.printStackTrace();
+        } catch (Exception e){
+            ExceptionHandler.showToUser(e, true);
         }
 
         return employerWorkDay;
@@ -150,8 +155,8 @@ public class EntityFactory implements AbstractEntityFactory{
             preparedStatement.setInt(2, employerWorkDay.getId());
             preparedStatement.executeUpdate();
 
-        } catch (SQLException e){
-            e.printStackTrace();
+        } catch (Exception e){
+            ExceptionHandler.showToUser(e, true);
         }
 
         return employerWorkDay;
@@ -178,7 +183,7 @@ public class EntityFactory implements AbstractEntityFactory{
                 objects.add(object);
             }
         } catch (Exception e){
-           e.printStackTrace();
+            ExceptionHandler.showToUser(e, true);
         }
         finally {}
         return objects;

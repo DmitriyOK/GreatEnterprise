@@ -7,7 +7,7 @@ import model.Employer;
 import services.EmployerService;
 
 /**
- * Created by Dmitriy on 16.03.2017.
+ * Реализация интерфейса {@link EmployerService}
  */
 public class EmployerServiceImpl implements EmployerService {
 

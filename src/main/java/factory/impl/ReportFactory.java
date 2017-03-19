@@ -14,8 +14,8 @@ public class ReportFactory implements AbstractReportFactory {
      *  через вызов toString() каждого объекта. Метод toString()
      *  должен быть переопределен.
      *
-     * @param reportTitle - заголовок отчета.
-     * @param results - отчетный список.
+     * @param reportTitle заголовок отчета.
+     * @param results отчетный список.
      * @return отчет как объект класса{@link String}
      */
 
