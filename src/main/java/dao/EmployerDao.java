@@ -10,10 +10,7 @@ import java.util.List;
  */
 public interface EmployerDao {
     /**
-     * Находит существующего пользователя по указанному логину
-     *
-     * @param login - логин пользователя
-     * @return {@link Employer} или null если пользователь не существует
+     * Описание по ссылке {@link factory.AbstractEntityFactory}
      */
     Employer findByLogin(String login);
 

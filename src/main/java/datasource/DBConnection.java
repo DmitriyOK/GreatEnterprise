@@ -1,6 +1,6 @@
 package datasource;
 
-import Validator.Validator;
+import validator.Validator;
 import main.Application;
 
 import java.io.*;

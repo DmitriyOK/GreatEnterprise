@@ -1,6 +1,6 @@
 package services.impl;
 
-import Validator.Validator;
+import validator.Validator;
 import dao.EmployerDao;
 import dao.impl.EmployerDaoImpl;
 import model.Employer;

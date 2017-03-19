@@ -17,6 +17,19 @@ import java.util.*;
 import static period.Period.currentDayUnixTime;
 import static period.Period.plusDay;
 
+/**
+ * Реализация интерфейса {@link AbstractEntityFactory}
+ *
+ * Класс, который представляет сущности баз данных в java - объекты.
+ * Поля сопоставляются по аннотации {@link Column}.
+ * Поддерживаются следующие типы данных: String, Integer, Boolean.
+ * Если аннотацией отмечен не поддерживаемый тип данных,
+ * значение переменной класса не будет присвоено.
+ *
+ * @throw {@link NoSuchElementException} когда у класса,
+ *         отмеченного аннотацией {@link annotation.Entity}
+ *         отсутсвует аннотация {@link annotation.Table}
+ */
 public class EntityFactory implements AbstractEntityFactory{
 
     public  List<Object> findEmployerByLogin(String login) {
@@ -96,6 +109,8 @@ public class EntityFactory implements AbstractEntityFactory{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println(currentDayUnixTime(false));
+        System.out.println(resultList);
         return resultList;
     }
 

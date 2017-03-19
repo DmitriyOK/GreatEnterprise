@@ -1,6 +1,6 @@
 package main;
 
-import Validator.Validator;
+import validator.Validator;
 import datasource.DBConnection;
 import factory.impl.ReportFactory;
 import model.Employer;
@@ -18,6 +18,11 @@ import java.util.List;
 
 
 import javax.swing.*;
+
+
+/**
+ * Класс запускающий работу программы.
+ */
 
 public class Application extends JFrame implements ActionListener {
 
@@ -215,6 +220,10 @@ public class Application extends JFrame implements ActionListener {
         return file;
     }
 
+    /**
+     *  Метод запускающий программу.
+     * @param args
+     */
     public static void main(String[] args) {
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {

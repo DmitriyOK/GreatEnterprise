@@ -31,7 +31,7 @@ public enum SqlQuery {
 
     CURRENT_EMPLOYER_WORK_DAY("SELECT * " +
             "FROM employerworkday " +
-            "WHERE unixStartTime>= ? and employerId =?"),
+            "WHERE unixStartTime >= ? and employerId =?"),
 
     UPDATE_EMPLOYER_WORK_DAY_BEGIN("UPDATE employerworkday " +
             "SET startTime =?, unixStartTime=? " +

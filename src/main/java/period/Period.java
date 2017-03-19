@@ -44,6 +44,7 @@ public abstract class Period {
         long temp;
         java.util.Date date = new java.util.Date();
         temp = date.getTime()/1000;
+        temp-=2160; //корректировка на часовой пояс
         temp = temp/86400;
 
         if(finishCurrentDay){
