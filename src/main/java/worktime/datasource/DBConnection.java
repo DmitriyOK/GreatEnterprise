@@ -3,6 +3,10 @@ package worktime.datasource;
 import worktime.handler.ExceptionHandler;
 import worktime.validator.Validator;
 import worktime.main.Application;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.io.*;
 import java.sql.*;
 import java.util.Properties;
@@ -18,7 +22,7 @@ public abstract class DBConnection {
     private static Properties properties = new Properties();
     private static  String dataBaseUrl, username, password;
     private static boolean isInit;
-
+    private static EntityManager entityManager;
 
     /**
      * Инициализирует соединение с базой данных из загружаемого
@@ -106,6 +110,14 @@ public abstract class DBConnection {
     public static Connection getConnection(){
 
         return connection;
+    }
+
+    public static EntityManager getEntityManager() {
+        if (entityManager == null){
+            EntityManagerFactory factory = Persistence.createEntityManagerFactory("jpaUnit");
+            entityManager = factory.createEntityManager();
+        }
+        return entityManager;
     }
 }
 

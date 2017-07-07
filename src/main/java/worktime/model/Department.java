@@ -1,8 +1,7 @@
 package worktime.model;
 
-import worktime.annotation.Column;
-import worktime.annotation.Entity;
-import worktime.annotation.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Простой Java-объект для представления записи таблицы "department"
@@ -12,35 +11,57 @@ import worktime.annotation.Table;
 @Table(name ="department")
 public class Department {
 
+    @Id
+    @Column(name = "id")
     private Integer id;
+
+    @Column(name = "departmentName")
     private String departmentName;
+
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "department")
+    Set<Employer> employers;
 
     public Department() {
     }
 
-    @Column(name = "id")
     public void setId(int id) {
         this.id = id;
     }
 
-    @Column(name = "departmentName")
+
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
+
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
 
     public int getId() {
         return id;
     }
 
-    public String getName() {
-        return departmentName;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Set<Employer> getEmployers() {
+        return employers;
+    }
+
+    public void setEmployers(Set<Employer> employers) {
+        this.employers = employers;
     }
 
     @Override
     public String toString() {
         return "Department{" +
                 "id=" + id +
-                ", name='" + departmentName + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                ", employer=" + employers +
                 '}';
     }
 }
